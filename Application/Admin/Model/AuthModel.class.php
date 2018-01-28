@@ -15,20 +15,34 @@ class AuthModel extends Auth{
 		$M=M('auth_rule');
 		$auth_list=$this->getAuthList($userid,1);
 		$main_nav=$M->where(['name'=>['in',$auth_list]])->order('orderid')->select();
+
+		$subnav=M('auth_rule')->where(['type'=>2])->order('orderid')->select();
 		foreach($main_nav as $k=>$v){
-			if(strtolower($v['name'])==strtolower($controller_name)){
-				$cur_nav_main_id=$v['id'];
-				$main_nav[$k]['cur']=true;
-				break;
-			}
-		}
-		$subnav=M('auth_rule')->where(['type'=>2,'pid'=>$cur_nav_main_id])->order('orderid')->select();
-		foreach($subnav as $k=>$v){
-			if($this->cur_subnav==$v['id']){
-				$subnav[$k]['cur']=true;
-				break;
-			}
-		}
+		    foreach ($subnav as $key=>$val){
+		       if($v['id']==$val['pid']){
+                   $main_nav[$k]['sub'][] = $val;
+               }
+            }
+//            if(strtolower($v['name'])==strtolower($controller_name)){
+//                $cur_nav_main_id=$v['id'];
+//                $main_nav[$k]['cur']=true;
+//                break;
+//            }
+        }
+//        foreach($main_nav as $k=>$v){
+//            if(strtolower($v['name'])==strtolower($controller_name)){
+//                $cur_nav_main_id=$v['id'];
+//                $main_nav[$k]['cur']=true;
+//                break;
+//            }
+//        }
+//		foreach($subnav as $k=>$v){
+//			if($this->cur_subnav==$v['id']){
+//				$subnav[$k]['cur']=true;
+//				break;
+//			}
+//		}
+//        dump($main_nav);
 		$this->mainnav=$main_nav;
 		$this->subnav=$subnav;
 	}
