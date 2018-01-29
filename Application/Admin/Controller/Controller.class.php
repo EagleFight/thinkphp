@@ -23,6 +23,8 @@ class Controller extends \Think\Controller
         if(!$auth->init(CONTROLLER_NAME,session('admin_login.id')))$this->error('没有权限访问');
 
         #生成菜单，路径，auth->init()不仅验证了权限，也生成nav,path
+
+        $this->user = session('admin_login');
         $this->mainnav=$auth->mainnav;
         $this->subnav=$auth->subnav;
         $this->path=$auth->path;
