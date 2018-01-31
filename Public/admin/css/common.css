@@ -1,0 +1,10 @@
+.layui-header{background-color: white !important;border-bottom: 1px solid #cfd8dc;height: 60px;}
+.layui-header .layui-nav .layui-nav-item a,.layui-header .layui-nav .layui-nav-item a:hover{color:black;}
+
+.frame_path{border-bottom: 1px solid #cfd8dc;background: white;line-height:44px;height: 44px;transition:.3s;padding-left: 20px;font-size: 14px;color: #b8c5ca;}
+.frame_path a{color: #b8c5ca;transition: .2s;}
+.frame_path a:hover{color: #414770;text-decoration: underline;}
+.frame_path span{color: #414770}
+.frame_path_fold{margin-left: 160px;}
+.frame_content{padding: 20px;transition:.3s;position: absolute;left:260px;top:125px;bottom:0;right:0;overflow: auto;min-width:900px;}
+.frame_content_fold{left:160px;}
