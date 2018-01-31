@@ -11,8 +11,8 @@ return array(
     'DB_PREFIX'             =>  '',          // 数据库表前缀
 
     //Module
-    'MODULE_ALLOW_LIST' => array('Home','Admin'),
-    'DEFAULT_MODULE'    => 'Home',
+    'MODULE_ALLOW_LIST' => array('Home','Admin','Desktop'),
+    'DEFAULT_MODULE'    => 'Desktop',
 //    'URL_MODULE_MAP'    => array('mng'=>'admin'),
 
     //模板相关配置
