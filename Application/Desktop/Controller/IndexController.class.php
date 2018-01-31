@@ -4,7 +4,8 @@ use Think\Controller;
 class IndexController extends Controller {
     public function index(){
         if(IS_AJAX){
-            $this->ajaxReturn(['status'=>'http://127.0.0.2/index.php/Admin/Index/index.html']);
+            $tpl = $this->fetch('tpl_icon_list');
+            $this->ajaxReturn($tpl);
         }
         $this->display();
     }

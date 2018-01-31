@@ -40,9 +40,11 @@
         Content.push("<div id=\"DialogBySHF\" style=\"width:" + PARAMS.Width + "px;height:" + PARAMS.Height + "px;left:" + positionLeft + "px;top:" + positionTop + "px;\">");
         Content.push("    <div id=\"Title\"><span>" + PARAMS.Title + "</span><span id=\"Close\">&#10005;</span></div>");
         Content.push("    <div id=\"Container\" style=\"width:" + ContentWidth + "px;height:" + ContentHeight + "px;\">");
+        // if (caller == "Dialog") {
+        //     Content.push("<iframe frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" src=\"" + PARAMS.URL + "\" ></iframe>");
+        // }
         if (caller == "Dialog") {
-            Content.push("<iframe frameborder=\"0\" marginwidth=\"0\" marginheight=\"0\" src=\""
-                + PARAMS.URL + "\" ></iframe>");
+            Content.push(PARAMS.URL);
         }
         else {
             var TipLineHeight = ContentHeight - 60;

@@ -60,7 +60,7 @@ a:hover,a:active,a:focus{text-decoration:none;}
 .login-right a{float:left;width:100%;color:#2786e4;line-height:30px;text-indent:10px;}
 .login-but{width:100%;height:30px;margin:13px 0;float:left;background:#09a3dc;color:#fff;text-align:center;line-height:30px;border-radius:4px;font-size:14px; cursor:context-menu;}
 
-.qq{width:280px;height:700px;box-shadow:0 0 3px #fff;background:#fff;border-radius:4px;position:fixed;top:50%;right:30px;margin-top:-350px;overflow:hidden;-webkit-transition:all 0.5s;display:none;}
+.qq{width:280px;height:700px;box-shadow:0 0 3px #fff;background:#fff;border-radius:4px;position:fixed;/*top:50%;right:30px;margin-top:-350px;overflow:hidden;*/-webkit-transition:all 0.5s;display:none;}
 .qq-top{width:100%;height:165px;float:left;background:url(../images/qq-bg.jpg) left top no-repeat;border-radius:4px 4px 0 0;overflow:hidden;}
 .qq-top-icon{float:left;width:100%;height:28px;}
 .qq-top-icon i{width:50px;height:18px;margin:6px 6px;float:left;}
