@@ -1,0 +1,228 @@
+<extend name="./base" />
+<block name="title">{$title}</block>
+<block name="css">
+    <link rel="stylesheet" type="text/css" href="__PUB__/css/form.css">
+</block>
+<block name="body">
+	<div class="sys_path">当前位置：用户管理 > VIP用户 > {$title}</div>
+    <div class="main_note journal_main">
+        <!-- <form class="layui-form" enctype="multipart/form-data" action="" method="post" id="this_form"> -->
+            <div class="main">
+                <p class="form_head">VIP套餐</p>
+                <hr>
+                <table border="0" cellspacing="0" cellpadding="0" class="tab_vip_setmeal">
+                    <tr>
+                        <td width="50%">
+                            <img src="{$user.setmeal_icon}" alt="">
+                            <span class="setmeal_vip">{$user.setmeal_name}</span>
+                        </td>
+                        <td>
+                            <img src="{$user.recommend_img}" alt="">
+                            <div class="left_f">
+                                <span><switch name="user.steward_grade"><case value="1">钻石</case><case value="2">铂金</case><case value="3">黄金</case><default /></switch>健康管家</span>
+                                <p>{$user.steward_name}</p>
+                            </div>                      
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            {$tplJournal}
+            <div class="add_more">
+                <a class="layui-btn layui-btn-primary layui-btn-sm add_btn" href="javascript:;">+&nbsp;添加时间段</a>           
+            </div>            
+            <input type="hidden" name="uid" value="{$user.health_uid}">
+            <div class="submit">
+                <a href="javascript:;" class="layui-btn layui-btn-primary" onclick="window.location.reload();">重置</a>
+                <a href="javascript:;" class="layui-btn layui-btn-normal" id="submit_form">提交并保存</a>                    
+            </div>            
+        <!-- </form> -->
+    </div>
+	{$vipCard}
+</block>
+<block name="script">
+	<script src="__PUB__/js/jquery.min.js"></script>
+    <script type="text/javascript">
+    // function isNull(data){return (data==""||data==undefined||data==null||data==0)?true:false;}
+    function skip(){
+        self.location=document.referrer;
+    }
+
+    layui.use(['element','form','layer'], function() {
+        var element = layui.element;
+        form = layui.form;
+        var laydate = layui.laydate;
+        // laydate.render({elem: '#date',format: 'yyyy-MM-dd'});           
+    });
+    $(function(){
+        $('.add_btn').click(function(){
+            var index_load = layer.load(1, {shade: [0.1,'#5A52BF']});
+            var time_id = [];
+            $("[name='time_id[]']").each(function(){
+                time_id.push($(this).val());
+            });          
+            var this_ = $(this);
+            $.post("{:U('addJournalHtml')}", {time_id:time_id},
+              function(data){
+                layer.close(index_load);
+                if(data.status==1){
+                    this_.parent().before($(data.msg));
+                }else{
+                    layer.msg(data.msg, { icon: 5 });
+                }
+                
+            });
+        });
+        $('.journal_main').on('click','.add_btn_2',function(){
+            var tpl = '<include file="tpl_journal_option" />';
+            $(this).before($(tpl));
+
+//            console.log(disable());
+
+        });
+        //select、input不能出现同名
+        function disable() {
+            var array = new Array();
+            $('.form_block').each(function (i) {
+                array[i] = new Array();
+                $(this).find('.option_id_child').each(function (n) {
+                    array[i][n] = $(this).val();
+//                    $(this).click(function () {
+//                        $('.option_id_child').not(this).each(function () {
+//                            if($(this).val().indexOf($(this).val())>=0){
+//                                $(this).children('option[value='+$(this).val()+']').attr('disabled','disabled');
+//                        }
+////                        console.log($(this));
+////                        alert($(this).text());
+//                    });
+                });
+            });
+            return array;
+        }
+
+        $('.journal_main').on('click','.del_block',function(){
+            $(this).parent().remove();
+        });
+        $('.journal_main').on('click','.del',function(){
+            $(this).parent().remove();
+        });        
+        $('.journal_main').on('change',".option_name",function(){
+            var id = $(this).val();
+            var dom_ = $(this).parent().find('.option_id_child');
+            var dom_ch = $(this).parent().find('ul');
+            dom_.empty();
+            dom_ch.empty();
+            $.getJSON("{:U('resJournalOption')}", {id:id}, function(json) {
+                dom_ .append('<option value="">请选择</option>');                   
+                $.each(json.msg, function(n, value) {
+                    dom_ .append('<option value="'+value.option_id+'">'+value.name+'</option>');
+                });
+                var data = disable();
+                console.log(data);
+                $('.form_block').each(function (i) {
+                    $(this).find('.option_id_child').each(function (n) {
+                        $(this).find('option').each(function (k) {
+                            for(var m = 0;m<data.length;m++){
+                                for(var j = 0;j<data[m].length;j++){
+                                    if($(this).attr('value').indexOf(data[m][j])>=0&&data[m][j]!='') {
+//                                        $(this).attr('disabled', 'disabled');
+//                                        $('option[value='+$(this).attr('value')+']').first().attr('disabled', false);
+                                    }
+
+                                }
+                            }
+                        });
+                    });
+                });
+            });
+
+        });
+        $('.journal_main').on('change',"[name='option_id']",function(){
+            var id = $(this).val();
+            var dom_ = $(this).parent().find('ul');
+            dom_.empty();
+            $.getJSON("{:U('resJournalOption')}", {id:id}, function(json) {                
+                $.each(json.msg, function(n, value) {
+                    switch(json.status){
+                        case 1:
+                          var html = '<li><input type="checkbox" name=check_'+value.pid +" value="+value.option_id+" lay-skin=primary title="+value.name+'></li>';
+                          break;
+                        case 2:
+                          var html = '<li><p><span>'+value.name+'</span><input type="text" value="" name="log_'+value.pid+'_'+value.option_id+'"><i>'+value.units+'</i></p></li>';
+                          break;
+                        default:
+                          break;
+                    }                    
+                    dom_ .append(html);
+                });
+                if(json.status==1) form.render('checkbox');                
+            });
+        });
+
+
+
+
+        //多表单同时提交
+        $('#submit_form').click(function(){
+            layer.confirm('请仔细填写，提交后无法修改删除，确认保存？', {
+              skin: 'layui-layer-lan',
+              title: '提示',
+              btn: ['确定','取消']
+            }, function(){
+
+
+                // var index_load = layer.load(1, {shade: [0.1,'#5A52BF']});
+                // var formData = new FormData($( ".form_block" ).eq(1)[0]);
+                // var formData1 = new FormData($( ".form_block" )[1]);
+                var arr = new Array();
+                var length = $('.form_block').length;
+                for (var i = 0; i < length; i++) {
+                    arr[i] = {};
+                    var m = i+1;
+                    $.each($('.form_block').eq(i).serializeArray(), function(n, field){
+                        if($("input[name="+field.name+"]").attr('type')=='checkbox'){
+//
+                            var mm = $('.form_block').eq(i).find("input[name="+field.name+"]");
+                            arr[i][field.name] = [];
+                            for(var k = 0;k<mm.length;k++){
+                                if(mm.eq(k).is(':checked')){arr[i][field.name].push(mm.eq(k).val())};
+                            }
+                        }else{
+                            arr[i][field.name] =field.value;
+                        }
+                    });
+                    console.log(arr);
+                }                
+
+                $.ajax({
+                    type: 'post',
+                    url: '__SELF__',  
+                    data: {data:arr},
+                    // data: $('.form_block').eq(0).serialize(),
+                    // data: formData,
+                    dataType: 'json',
+                    // async: true,  
+                    // cache: false,  
+                    // contentType: false,  
+                    // processData: false,  
+                    success: function(data) {
+                       // layer.close(index_load);
+                       if(data.status == 0){
+                            layer.msg(data.msg,{icon:5});                          
+                       }else if(data.status == 1){
+                            layer.msg('成功,即将跳转！',{icon:1}); 
+                            setTimeout("skip()",1500);
+                       }else{
+                            layer.msg('提交失败，请稍后再试！',{icon:5});   
+                       }
+                       return false;                           
+                    }, 
+                    error:function(XMLHttpRequest, textStatus){
+                        layer.close(index_load);
+                        layer.msg('提交失败，原因可能如下：<br>选项重复',{icon:5});  
+                    }                   
+                });
+            }, function(){}); 
+        });                                             
+    });
+    </script>
+</block>
