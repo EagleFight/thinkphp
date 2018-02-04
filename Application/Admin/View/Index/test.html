@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HTML5调用电脑摄像头实例</title>
+    <script type="text/javascript">   
+        window.addEventListener("DOMContentLoaded", function() {  
+            // Grab elements, create settings, etc.  
+            var canvas = document.getElementById("canvas"),  
+                context = canvas.getContext("2d"),  
+                video = document.getElementById("video"),  
+                videoObj = { "video": true },  
+                errBack = function(error) {  
+                    console.log("Video capture error: ", error.code);   
+                };  
+           
+            // Put video listeners into place  
+            if(navigator.getUserMedia) { // Standard  
+                //alert("支持navigator.getUserMedia");
+                navigator.getUserMedia(videoObj, function(stream) {  
+                    video.src = stream;  
+                    video.play();  
+                }, errBack);  
+            } else if(navigator.webkitGetUserMedia) { // WebKit-prefixed  
+                //alert("支持navigator.webkitGetUserMedia");
+                navigator.webkitGetUserMedia(videoObj, function(stream){  
+                    video.src = window.webkitURL.createObjectURL(stream);  
+                    video.play();  
+                }, errBack);  
+            }  
+            else if(navigator.mozGetUserMedia) { // Firefox-prefixed  
+                //alert("支持navigator.mozGetUserMedia");
+                navigator.mozGetUserMedia(videoObj, function(stream){  
+                    video.src = window.URL.createObjectURL(stream);  
+                    video.play();  
+                }, errBack);  
+            }  
+            // 触发拍照动作  
+            document.getElementById("snap").addEventListener("click", function() {  
+                context.drawImage(video, 0, 0, 640, 480);  
+            }); 
+ 
+        }, false);   
+    </script>
+</head>
+<body>
+    <input type='file' accept="image/*" capture="camera"> 
+	<input type='file' accept="video/*" capture="camcorder"> 
+	<input type='file' accept="audio/*" capture="microphone"> 
+	capture表示，可以捕获到系统默认的设备，比如：camera--照相机；camcorder--摄像机；microphone--录音。
+
+accept表示，直接打开系统文件目录。
+
+其实html5的input:file标签还支持一个multiple属性，表示可以支持多选，如：
+
+
+
+加上这个multiple后，capture就没啥用了，因为multiple是专门用来支持多选的。
+</body>
+</html>
