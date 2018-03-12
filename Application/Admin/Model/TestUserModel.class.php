@@ -17,7 +17,8 @@ class TestUserModel extends Model\RelationModel {
             'mapping_type'=>self::HAS_MANY,
             'foreign_key'=>'uid',
             'mapping_fields'=>'content',
-            'mapping_limit'=>'0,2'
+            'mapping_limit'=>'0,2',
+            'mapping_order'=>'id desc'
         ),
     );
 }
