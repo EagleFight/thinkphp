@@ -13,4 +13,5 @@ class UserController extends Controller {
         $this->assign('user',$user);
         $this->display();
     }
+
 }
