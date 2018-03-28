@@ -1,0 +1,98 @@
+<extend name="Public:base" />
+<block name="style">
+    <title>{$info.title}</title>
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/login.css?v={:time()}" />
+</block>
+<block name="boby">
+    <div class="login retrieve">
+        <div class="title">找回密码</div>
+        <div class="content">   
+            <div class="login_u">
+               <div class="form">
+                   <div>重置密码</div>
+                   <form action="" method="post" accept-charset="utf-8">
+                       <p class="input_w">
+                            <span class="pswImg"></span>
+                            <input type="password" name="password" placeholder="密码">
+                        </p>                           
+                        <p class="input_w">
+                            <span class="pswImg"></span>
+                            <input type="password" name="surepsw" placeholder="确认密码">
+                        </p>
+                       <p class="btn_ loginBtn"><input type="button" name="submit" value="确认" class="input_base"></p>
+                   </form>            
+               </div>                
+            </div>
+        </div>
+        <div class="bg_"></div><div class="tips"><span></span></div>
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript">
+        $(function(){
+            $('input[name=password],input[name=surepsw]').focus(function(){
+                $(this).parent().css('border','1px solid #11BFAF');
+                $(this).prev().css('background-position','-24px 0px');
+            });                       
+            $('input[name=password],input[name=surepsw]').blur(function(){
+                $(this).parent().css('border','1px solid #E5E5E5');
+                $(this).prev().css('background-position','-24px -24px');
+            });
+            $('input[name=submit]').on('click', function(){
+                editPsw();
+            });                    
+        });    
+        function editPsw(){
+            var password = $('input[name=password]');
+            var surepsw = $('input[name=surepsw]');
+            var pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;            
+            if(isNull(password.val())){
+                tips('请输入密码',2);
+                return false;
+            } 
+            if(!pwdReg.test(password.val())){
+                tips('请输入6-16位密码（限字母+数字组合）',2);
+                return false;                
+            }                       
+            if(isNull(surepsw.val())){
+                tips('请确认密码',2);
+                return false;
+            }
+            if(password.val()!=surepsw.val()){
+                tips('两次密码不相同',2);
+                return false;                
+            } 
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data:{'psw':password.val(),'surepsw':surepsw.val()},
+                url: '__SELF__',
+                success: function (data) {                    
+                    if(data.status == 1){
+                        tips(data.info);
+                        setTimeout("skip()",1500);
+                    }else{
+                      tips(data.info,2);  
+                    }
+                }, 
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    tips('请勿重复提交！',2);
+                }
+            });              
+        }
+        function skip(){
+            window.location.href="__CONTROLLER__/login/?oper=account";
+        }  
+        function isNull(data){ 
+            return (data == "" || data == undefined || data == null || data == 0) ? true : false; 
+        }
+        function tips(data,sts){
+            $('.tips span').css('background-color','#11BFAF');
+            if(sts==2){
+                $('.tips span').css('background-color','red');
+            }
+            $('.tips span').text(data);
+            $('.tips,.bg_').fadeIn().delay(1000).fadeOut();
+        }        
+    </script>
+</block>

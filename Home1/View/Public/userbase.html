@@ -1,0 +1,53 @@
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta  content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" >
+
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/reset.css" />
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/member.css" />
+    <block name="title"></block>
+    <script type="text/javascript" src="__PUBLIC__/pc/js/jquery-2.1.0.js"></script>
+    <block name="style"></block>
+</head>
+
+<body>
+<block name="head" >
+    <div class="head-block-fixed">
+        <div class="head-block">
+            <div class="head">
+                <div class="head-left">
+                    <i></i>
+                    <ul class="nav">
+                        <li class="active"><a href="{:U('Index/index')}" >首页</a></li>
+                        <li><a href="index.html">问答</a></li>
+                        <li><a href="index.html">学习</a></li>
+                        <li><a href="index.html">活动</a></li>
+                        <li><a href="index.html">工具</a></li>
+                        <li><a href="index.html">社区</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="head-right">
+                        <a href="{:U('User/index')}"><img class="portrait" src="{$userInfo.avatar}"></a>
+                        <p class="news"><a href="#">10</a></p>
+                        <ul class="question">
+                            <a href="{:U('User/index')}"><li>个人中心</li></a>
+                            <a href="{:U('User/subscribe')}"><li>我的订阅</li></a>
+                            <a href="{:U('User/answer')}"><li>我的问题</li></a>
+                            <a href="{:U('public/logout')}"><li>退出登录</li></a>
+                        </ul>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="member"></block>
+<block name="script"></block>
+</body>
+
+</html>

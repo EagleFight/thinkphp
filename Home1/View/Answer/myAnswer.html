@@ -1,0 +1,129 @@
+<extend name="Public:base_densin" />
+
+<block name="docMeta">
+</block>
+
+<block name="docFile">
+<load href="__PUBLIC__/pc/answer/stylesheets/answer.css" />
+<js href='__PUBLIC__/home/scripts/functions.js' />
+<script type="text/javascript">
+window.onload=goTopPos;
+window.onresize=goTopPos;
+window.onscroll=function(){
+	goTopVisible();
+	if(p<4){
+		scrollLoad();
+	}else{
+		document.querySelector('.split_tips').onclick=loadmore;
+		window.onscroll=goTopVisible;
+	}
+}
+loading=false;
+p=1;
+function scrollLoad(){
+	visibleHeight=document.documentElement.clientHeight;
+	totalHeight=document.body.scrollHeight;
+	if(getScrollTop()+visibleHeight>=totalHeight-15)loadmore();
+}
+function goTopVisible(){
+	if(getScrollTop()>100){
+		if(document.querySelector('.btn_gototop_visible'))return;
+		addClass(document.querySelector('.btn_gototop'),'btn_gototop_visible');
+	}else{
+		if(!document.querySelector('.btn_gototop_visible'))return;
+		removeClass(document.querySelector('.btn_gototop_visible'),'btn_gototop_visible');
+	}
+}
+function goTopPos(){
+	top_obj=document.querySelector('main');
+	btn=document.querySelector('.btn_gototop');
+	right=top_obj.offsetLeft<btn.clientWidth+20?20:top_obj.offsetLeft-btn.clientWidth-20;
+	btn.style.right=right+'px';
+	btn.onclick=scrollTo;
+}
+function loadmore(){
+	if(loading)return;
+	obj=document.querySelector('.loading span');
+	obj.innerHTML='加载中...';
+	loading=true;
+	ajax('{:U("getMyAnswerList",false,false)}/p/'+p,function(data){
+		end=data.end;
+		data=data.data;
+		if(!data || data.length<1){
+			obj.innerHTML='哼，我们是有底线的';
+		}else{
+			obj.innerHTML=(p<3)?'下滑到底部加载':'点击继续加载';
+			p++;
+			ul=document.querySelector('.index_list ul');
+			html='';
+			tpl='<li class="box_shadow">'+
+				'<div class="question_info">'+
+					'<a class="ctegory_tag" href="{:U("category",false,false)}/category_id/$category_id$">$category_name$</a>'+
+					'<h3><a href="{:U("dtl",false,false)}/id/$answer_id$">$title$</a></h3>'+
+					'<p class="thumb"></p>'+
+					'<div><time>$answer_create_time$</time><a class="user" href="{:U("Other/answer",false,false)}/uid/$user_id$"><img src="$avatar$">$nickname$</a></div>'+
+				'</div>'+
+				'<div class="answer_info">'+
+					'<p class="avatar"><a href="#"><img src="{$user_info.avatar}"></a></p>'+
+					'<div class="content">'+
+						'<a href="#" class="nickname">{$user_info.nickname}</a><time>$create_time$</time>'+
+						'<div class="answer_detail">$content$</div>'+
+						'<p class="thumb">$thumb$</p>'+
+						'<a href="{:U("comments",false,false)}/id/$id$" class="comments">共$unread_comment_count$条回复&gt;</a>'+
+					'</div>'+
+				'</div>'+
+			'</li>';
+			for(i=0;i<data.length;i++){
+				if(data[i].media){
+					data[i].thumb='';
+					data[i].media.forEach(function(e){
+						data[i].thumb+='<img src="'+e+'">';
+					});
+				}
+				data[i].create_time=data[i].create_time.substr(0,10);
+				data[i].answer_create_time=data[i].answer_create_time.substr(0,10);
+				html+=tpl.tpl(data[i]);
+			}
+			ul.innerHTML+=html;
+			if(end){
+				obj.innerHTML='哼，我们是有底线的';
+			}else{
+				loading=false;
+				if(window.innerHeight>document.body.clientHeight)loadmore();
+			}
+		}
+	});
+}
+</script>
+</block>
+
+<block name="docBody">
+<div class="box_shadow btn_gototop"></div>
+<main>
+	<include file="left" />
+	<section class="index_list myanswer_list">
+		<ul>
+			<!--<li class="box_shadow">
+				<div class="question_info">
+					<a class="ctegory_tag" href="/Answer/category/category_id/4">身体护理</a>
+					<h3><a href="/Answer/dtl/id/14">测试HB测试HB测试HB测试HB测试HB</a></h3>
+					<p class="thumb"></p>
+					<div><time>2017-06-14</time><a class="user" href="#"><img src="http://wx.qlogo.cn/mmopen/Gib5hvfJEUone5ic8JBFR51Zpkpgba0Xy4Pzw5Ariak7Z47qNNWWrggiafAqb0X1ibpqkfzsB0bQwvCSrRQv5fUw06TXrmO3SLJmP/0">Show.</a></div>
+				</div>
+				<div class="answer_info">
+					<p class="avatar"><a href="#"><img src="http://wx.qlogo.cn/mmopen/Gib5hvfJEUone5ic8JBFR51Zpkpgba0Xy4Pzw5Ariak7Z47qNNWWrggiafAqb0X1ibpqkfzsB0bQwvCSrRQv5fUw06TXrmO3SLJmP/0"></a></p>
+					<div class="content">
+						<a href="#" class="nickname">张三李四王麻子</a><time>2017-06-22</time>
+						<div class="answer_detail">书就不用看了，平时多看一些棒子的电视剧啊，多看一些无聊的综艺节目啊。这些对你还有有很大的帮助的。真的！</div>
+						<p class="thumb"><img src="http://192.168.62.254/Uploads/2017-06-01/592f8b5c826c7_140_140_3.jpg"><img src="http://192.168.62.254/Uploads/2017-06-01/592f8b5c826c7_140_140_3.jpg"><img src="http://192.168.62.254/Uploads/2017-06-01/592f8b5c826c7_140_140_3.jpg"><img src="http://192.168.62.254/Uploads/2017-06-01/592f8b5c826c7_140_140_3.jpg"><img src="http://192.168.62.254/Uploads/2017-06-01/592f8b5c826c7_140_140_3.jpg"></p>
+						<a href="#" class="comments">共5条回复&gt;</a>
+					</div>
+				</div>
+			</li>-->
+		</ul>
+		<p class="split_tips loading"><span></span></p>
+	</section>
+	<script type="text/javascript">loadmore();</script>
+	<include file="right" />
+</main>
+</block>

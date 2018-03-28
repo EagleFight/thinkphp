@@ -1,0 +1,15 @@
+<aside class="left_side">
+		<p class="box_shadow subnav">
+			<a href="{:U('index')}"><img src="__PUBLIC__/pc/answer/images/ico_hot.png"><br>今日热门</a>
+			<a href="{:U('category')}"><img src="__PUBLIC__/pc/answer/images/ico_category.png"><br>问题分类</a>
+		</p>
+		<div class="box_shadow notice">
+			<p class="avatar"><img src="{$user_info.avatar}"><br>{$user_info.nickname}</p>
+			<ul class="list">
+				<li <eq name='Think.ACTION_NAME' value='today'>class="cur"</eq>><a href="{:U('today')}">今日问题<neq name="unread.today" value="0"><span>({$unread.today}条新消息)</span><else /><span class="none">没有消息</span></neq></a></li>
+				<li <eq name='Think.ACTION_NAME' value='myQuestion'>class="cur"</eq>><a href="{:U('myQuestion')}">我的提问<neq name="unread.ask" value="0"><span>({$unread.ask}条新消息)</span><else /><span class="none">没有消息</span></neq></a></li>
+				<li <eq name='Think.ACTION_NAME' value='myAnswer'>class="cur"</eq>><a href="{:U('myAnswer')}">我的回答<neq name="unread.answer" value="0"><span>({$unread.answer}条新消息)</span><else /><span class="none">没有消息</span></neq></a></li>
+			</ul>
+		</div>
+		<a class="btn quickask" href="{:U('ask')}">快速提问</a>
+	</aside>

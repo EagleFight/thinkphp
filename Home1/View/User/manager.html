@@ -1,0 +1,707 @@
+<extend name="User:public" />
+<block name="title">
+	<title>账号管理</title>
+</block>
+<block name="style">
+	<link rel="stylesheet" href="__PUBLIC__/pc/css/manager.css?v={:time()}" />
+	<link rel="stylesheet" href="__PUBLIC__/pc/css/lq.datetimepick.css"/>
+</block>
+<block name="member">
+
+		<div class="manager">
+			<div class="m_head">
+				账号管理
+			</div>
+			<div class="m_content radius">
+				<div class="m_head_list">
+					<ul>
+						<li class="active" tid="1" id="base_">基本信息<span></span></li>
+						<li tid="2" id="job_">从业信息<span></span></li>
+						<li tid="3" id="auth_">认证信息<span></span></li>
+						<li tid="4" id="safe_">安全信息<span></span></li>
+					</ul>					
+				</div>
+				<hr>
+				<div class="basic" id="basicInfo">
+					<form action="" method="post" id="formId" accept-charset="utf-8">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td>头像</td>
+								<td class="baseImg">
+									<!--<img src="{$userInfo.avatar}" alt="">-->
+									<!--<p id="_upload_img"></p>-->
+
+									<img id="preview" src="{$userInfo.avatar}" onclick="$('#doc').click()" style="width: 100px; height: 100px;" >
+									<input type="file" name="file" id="doc" value="" onchange="javascript:setImagePreview();" style="display: none">
+
+								</td>
+							</tr>
+							<tr>
+								<td>昵称</td>
+								<td class="pubInput"><input type="text" name="nickname" value="{$userInfo.nickname}" placeholder="请输入昵称"></td>
+							</tr>
+							<tr>
+								<td>性别</td>
+								<td class="sex">
+								<switch name="userInfo.sex">
+								    <case value="1">
+								        <label for="man" ><span class="radio_btn">
+								            <input type="radio" name="sex" id="man" checked="checked" value="1" />
+								            <span></span>
+								        </span>
+								        男</label>
+								        <label for="male"><span class="radio_btn">
+								            <input type="radio" name="sex" id="male" value="2">
+								            <span></span>
+								        </span>
+								        女</label>
+								    </case>
+								    <case value="2">
+								        <label for="man" ><span class="radio_btn">
+								            <input type="radio" name="sex" id="man" value="1"/>
+								            <span></span>
+								        </span>
+								        男</label>
+								        <label for="male"><span class="radio_btn">
+								            <input type="radio" name="sex" id="male" checked="checked" value="2">
+								            <span></span>
+								        </span>
+								        女</label>
+								    </case>
+								    <default />
+								        <label for="man" ><span class="radio_btn">
+								            <input type="radio" name="sex" id="man" value="1"/>
+								            <span></span>
+								        </span>
+								        男</label>
+								        <label for="male"><span class="radio_btn">
+								            <input type="radio" name="sex" id="male" value="2">
+								            <span></span>
+								        </span>
+								        女</label>
+								</switch>
+								</td>
+							</tr>
+							<tr>
+								<td>生日</td>
+								<td class="pubInput"><input type="text" readonly="readonly" id="datetimepicker3" name="birthday" value="{$userInfo.birthday}"></td>
+							</tr>
+							<tr>
+								<td>个人简介</td>
+								<td class="pubInput introduce"><input type="text" name="introduce" value="{$userInfo.signature}" placeholder="请输入简介、个性签名"></td>
+							</tr>																					
+						</table>
+						<p class="save" id="saveBasic">保 存</p>
+					</form>
+				</div>
+				<div class="basic" id="workInfo">
+					<form action="" method="post" accept-charset="utf-8">						
+						<table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td>工作地区</td>
+								<td class="pubInput">
+								    <div class="form-inline">
+								      <div id="distpicker5">
+								        <div class="form-group">
+								          <select class="form-control" id="province" data-province="{$userJob.province}"></select>
+								        </div>
+								        <div class="form-group">
+								          <select class="form-control" id="city" data-city="{$userJob.city}"></select>
+								        </div>
+								        <div class="form-group">
+								          <select class="form-control" id="district" data-district="{$userJob.district}"></select>
+								        </div>
+								      </div>
+								    </div>
+								</td>
+							</tr>						
+							<tr>
+								<td>从业医院</td>
+								<td class="pubInput"><input type="text" name="hospital" value="{$userJob.hospital}" placeholder="请输入从业医院"></td>
+							</tr>
+							<tr>
+								<td>科室</td>
+								<td class="pubInput"><input type="text" name="department" value="{$userJob.department}" placeholder="请输入科室名称"></td>
+							</tr>
+							<tr>
+								<td>职称</td>
+								<td class="pubInput"><input type="text" name="workTitle" value="{$userJob.title}" placeholder="请输入职称"></td>
+							</tr>																												
+						</table>
+						<p class="save" id="saveWork">保 存</p>
+					</form>					
+				</div>
+				<div class="basic job" id="authInfo">
+					<form action="" method="post" id="formInfo" accept-charset="utf-8">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%">	
+							<tr>
+								<td>真实姓名</td>
+								<td class="pubInput"><input type="text" name="realName" value="{$userAuth.real_name}" placeholder="请输入真实姓名"></td>
+							</tr>
+							<tr>
+								<td>身份证</td>
+								<td class="pubInput"><input type="text" name="userCard" value="{$userAuth.id_card}" placeholder="请输入身份证号"></td>
+							</tr>
+							<tr>
+								<td>执业证/胸牌</td>
+								<td class="license">
+									<p style="float: left;">
+										<img id="preview2" src="{$userAuth.job_id_photo_media_id|get_cover}"  onclick="$('#doc2').click()" style="width: 160px; height: 180px;" >
+										<input type="file" name="licenseImgId" id="doc2" value="" onchange="javascript:setImagePreview2();" style="display: none">
+
+										<!--<img src="{$userAuth.job_id_photo_media_id|get_cover}" alt="" id="licenseImg">-->
+									</p>
+									<!--<p id="addLicense" style="float: left;margin-left: 20px;border: 1px solid #EFEFEF;background-color: #FFF;text-align: center;">-->
+									<!--</p>-->
+								</td>
+							</tr>
+						</table>
+						<p class="save saveJob" id="saveJob">保 存</p>
+					</form>					
+				</div>
+				<div class="safeInfo" id="safeInfo">
+					<div class="line_">
+						<p><span class="base">绑定手机</span><span class="con con_1">{$userInfo.mobile|hideStar=###}</span><span class="changeBtn">更换手机</span></p>
+						<div class="edit radius">
+							<form action="" method="post" accept-charset="utf-8">
+								<table border="0" cellpadding="0" cellspacing="0" width="100%">	
+									<tr>
+										<td>当前绑定的手机</td>
+										<td class="pubInput"><input type="text" name="phoneNum" value="" Placeholder="请输入当前绑定的手机号码"></td>
+									</tr>
+									<tr>
+										<td>新的手机</td>
+										<td class="pubInput"><input type="text" name="mobile" placeholder="请输入新的手机号码" maxlength="11" onkeyup="value=value.replace(/[^\d]/g,'') " ng-pattern="/[^a-zA-Z]/"></td>
+									</tr>
+									<tr>
+										<td>验证码</td>
+										<td class="pubInput code_"><input type="text" name="sms_code" placeholder="获取的验证码"><input type="button" class="getCode" id="sendSmsBtn" value="获取验证码" style="width: 100px;border: none"></td>
+									</tr>
+								</table>
+								<p class="save savePhone" id="regBtn">保 存</p>
+							</form>							
+						</div>
+					</div>
+					<hr class="safeHr">
+
+					<div class="line_">
+						<p><span class="base">账户密码</span><span class="con">********</span><span class="changeBtn">更换密码</span></p>
+						<div class="edit radius">
+							<form action="" method="post" accept-charset="utf-8">
+								<table border="0" cellpadding="0" cellspacing="0" width="100%">	
+									<neq name="ispsw" value="0">
+										<tr>
+											<td>当前密码</td>
+											<td class="pubInput">
+											<input type="password" name="psw" placeholder="请输入你当前帐号的密码">
+											</td>
+										</tr>
+									</neq>
+									<tr>
+										<td>新密码</td>
+										<td class="pubInput"><input type="password" name="newpsw" placeholder="请输入新的密码"></td>
+									</tr>
+									<tr>
+										<td>确认新密码</td>
+										<td class="pubInput"><input type="password" name="surepsw" placeholder="确认的新密码"></td>
+									</tr>
+								</table>
+								<p class="save savePhone" id="savePsw">保 存</p>
+							</form>								
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="bg_"></div><div class="tips"><span></span></div>
+
+</block>
+
+<block name="script">
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src='__PUBLIC__/pc/js/selectUi.js' type='text/javascript'></script>
+<script src='__PUBLIC__/pc/js/lq.datetimepick.js' type='text/javascript'></script>
+<script src='__PUBLIC__/pc/js/distpicker.data.min.js' type='text/javascript'></script>
+<script src='__PUBLIC__/pc/js/distpicker.js' type='text/javascript'></script>
+<script src="__PUBLIC__/libs/jQuery-Huploadify/jquery.Huploadify.js"></script>
+
+<script type="text/javascript">
+	$(function(){
+		var oper = "{:I('get.oper')}";
+		switch(oper)
+		{
+		case 'job':
+		  $('#basicInfo,#authInfo,#safeInfo').hide();
+		  $('#workInfo').fadeIn();
+		  $('#base_').removeClass('active');
+		  $('#job_').addClass('active');('active');
+		  break;			
+		  case 'auth':
+		  $('#workInfo,#basicInfo,#safeInfo').hide();
+		  $('#authInfo').fadeIn();
+		  $('#base_').removeClass('active');
+		  $('#auth_').addClass('active');('active');		  
+		  break;			
+		  case 'safe':
+		  $('#workInfo,#authInfo,#basicInfo').hide();
+		  $('#safeInfo').fadeIn();
+		  $('#base_').removeClass('active');
+		  $('#safe_').addClass('active');('active');		  
+		  break;
+		default:
+		  // return;
+		}		
+		$('#distpicker5').distpicker({
+			autoSelect: false
+		});
+		$("#datetimepicker3").on("click",function(e){
+			e.stopPropagation();
+			$(this).lqdatetimepicker({
+				css : 'datetime-day',
+				dateType : 'D',
+				selectback : function(){
+
+				}
+			});
+
+		});
+		$('.changeBtn').click(function(){
+			if($(this).hasClass('changeBtnOn')){
+				$(this).parent().next().fadeOut();
+				$(this).removeClass('changeBtnOn')
+			}else{
+				$(this).parent().next().fadeIn();
+				$(this).addClass('changeBtnOn')
+			}
+		});
+		$('.m_head_list ul li').click(function(){
+			$(this).siblings().removeClass('active');
+			$(this).addClass('active');
+			var tid = $(this).attr('tid');
+			switch(tid)
+			{
+			case '1':
+			  $('#workInfo,#authInfo,#safeInfo').hide();
+			  $('#basicInfo').fadeIn();
+			  break;
+			case '2':
+			  $('#basicInfo,#authInfo,#safeInfo').hide();
+			  $('#workInfo').fadeIn();
+			  break;			
+			  case '3':
+			  $('#workInfo,#basicInfo,#safeInfo').hide();
+			  $('#authInfo').fadeIn();
+			  break;			
+			  case '4':
+			  $('#workInfo,#authInfo,#basicInfo').hide();
+			  $('#safeInfo').fadeIn();
+			  break;
+			default:
+			  return false;
+			}			
+		});
+//		var headerImg = $('#_upload_img').prev()[0].src;
+//        $('#_upload_img').Huploadify({
+//            uploader:'/home/Article/upload',
+//            fileTypeExts:'*.gif;*.jpg;*.jpeg;*.png;*.bmp',
+//            fileSizeLimit:512,
+//            buttonText:'修改头像',
+//            onUploadComplete:function(file, data){
+//            	data = JSON.parse(data);
+//            	if(data.error==0){
+//            		$('#_upload_img').prev().attr('src',data.url);
+//            		headerImg = data.url;
+//            	}
+//            }
+//        });
+        var licenseImgId =  '{$userAuth.job_id_photo_media_id}';  	
+        $('#addLicense').Huploadify({
+            'uploader':'/home/Article/upload',
+            'fileTypeExts':'*.gif;*.jpg;*.jpeg;*.png;*.bmp',
+            'fileSizeLimit':512,
+            'buttonText':'+',
+            onUploadComplete:function(file, data){
+            	data = JSON.parse(data);
+            	if(data.error==0){
+            		$('#licenseImg').attr('src',data.url); 
+            		licenseImgId = data.id;
+            	}
+            }
+        });
+        $('#saveBasic').click(function(){
+        	var nickname = $('input[name="nickname"]').val();  
+        	var sex = $('input:radio[name="sex"]:checked').val();
+        	var birthday = $('input[name="birthday"]').val();  
+        	var introduce = $('input[name="introduce"]').val();
+            if(isNull(nickname)){
+                tips('请输入昵称！',2);
+                return false;
+            }
+            if(isNull(sex)){
+                tips('请选择性别！',2);
+                return false;
+            }
+			var form = new FormData(document.getElementById("formId"));
+			$.ajax({
+				url: '__CONTROLLER__/saveBasic',
+				type: "post",
+				data: form,
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					if(data.status == 1){
+		        		tips(data.msg);
+		        		setTimeout('window.location.reload()',1000);
+		        	}else{
+		        		tips(data.msg);
+
+					}
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					tips('请勿重复提交！',2);
+                }
+			});
+
+//		    $.ajax({
+//		        type: 'post',
+//		        dataType: 'json',
+//		        data:{'nickname':nickname,'avatar':headerImg,'sex':sex,'birthday':birthday,'signature':introduce},
+//		        url: '__CONTROLLER__/saveBasic',
+//		        success: function (data) {
+//		        	if(data.status == 1){
+//		        		tips(data.msg);
+//		        		setTimeout('window.location.reload()',1000);
+//		        	}else{
+//		        		tips(data.msg);
+//		        	}
+//		        },
+//		        error: function(XMLHttpRequest, textStatus, errorThrown) {
+//					tips('请勿重复提交！',2);
+//                }
+//		    });
+        });
+        $('#saveWork').click(function(){
+        	var province = $('#province').val();
+        	var city = $('#city').val();
+        	var district = $('#district').val();
+        	var hospital = $('input[name="hospital"]').val();  
+        	var department = $('input[name="department"]').val();  
+        	var workTitle = $('input[name="workTitle"]').val();
+            if(isNull(hospital)){
+                tips('请输入从业医院',2);
+                return false;
+            }
+            if(isNull(department)){
+                tips('请输入科室！',2);
+                return false;
+            }            
+            if(isNull(workTitle)){
+                tips('请输入职称！',2);
+                return false;
+            }
+		    $.ajax({
+		        type: 'post',
+		        dataType: 'json',
+		        data:{'province':province,'city':city,'district':district,'hospital':hospital,'department':department,'title':workTitle},
+		        url: '__CONTROLLER__/saveWork',
+		        success: function (data) {
+					tips(data.msg);
+		        }, 
+		        error: function(XMLHttpRequest, textStatus, errorThrown) {
+					tips('请勿重复提交！',2);
+                }
+		    });        	
+        });
+        $('#saveJob').click(function(){
+        	var realName = $('input[name="realName"]').val();  
+        	var userCard = $('input[name="userCard"]').val();
+            if(isNull(realName)){
+                tips('请输入真实姓名',2);
+                return false;
+            }
+            if(isNull(userCard)){
+                tips('请输入身份证号！',2);
+                return false;
+            }
+			var form = new FormData(document.getElementById("formInfo"));
+			$.ajax({
+				url: '__CONTROLLER__/saveJob',
+				type: "post",
+				data: form,
+				processData: false,
+				contentType: false,
+				success: function (data) {
+					if(data.status == 1){
+						tips(data.msg);
+						setTimeout('window.location.reload()',1000);
+					}else{
+						tips(data.msg);
+					}
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					tips('未做修改！',2);
+				}
+			});
+
+//		    $.ajax({
+//		        type: 'post',
+//		        dataType: 'json',
+//		        data:{'realName':realName,'userCard':userCard,'licenseImgId':licenseImgId},
+//		        url: '__CONTROLLER__/saveJob',
+//		        success: function (data) {
+//		        	tips(data.msg);
+//		        },
+//		        error: function(XMLHttpRequest, textStatus, errorThrown) {
+//					tips('请勿重复提交！',2);
+//                }
+//		    });
+        });
+        $('#savePsw').click(function(){
+        	var oldPsw = $('input[name="psw"]').val(); 
+        	var newPsw = $('input[name="newpsw"]').val(); 
+        	var surePsw = $('input[name="surepsw"]').val();
+        	var pwdReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,16}$/;
+        	var isPsw = '';
+        	if(oldPsw == undefined){
+        		isPsw = 1;
+        	}else{
+        		isPsw = 2;
+	            if(isNull(oldPsw)){
+	                tips('请输入当前密码',2);
+	                return false;
+	            }         		
+        	}
+            if(isNull(newPsw)){
+                tips('请输入新密码',2);
+                return false;
+            } 
+            if(!pwdReg.test(newPsw)){
+                tips('请输入6-16位密码（限字母+数字组合）',2);
+                return false;                
+            }                       
+            if(isNull(surePsw)){
+                tips('请确认新密码',2);
+                return false;
+            }
+            if(newPsw!=surePsw){
+                tips('两次密码不相同',2);
+                return false;                
+            } 
+		    $.ajax({
+		        type: 'post',
+		        dataType: 'json',
+		        data:{'oldpsw':oldPsw,'newpsw':newPsw,'surepsw':surePsw,'isPsw':isPsw},
+		        url: '__CONTROLLER__/editPsw',
+		        success: function (data) {
+					if(data.status == 1){
+						tips(data.msg);
+						setTimeout('window.location.reload()',1000);
+					}else{
+						tips(data.msg,2);
+					}
+		        }, 
+		        error: function(XMLHttpRequest, textStatus, errorThrown) {
+					tips('请勿重复提交！',2);
+                }
+		    }); 
+        });                 
+	});
+    function isNull(data){ 
+        return (data == "" || data == undefined || data == null || data == 0) ? true : false; 
+    }
+    function tips(data,sts){
+        $('.tips span').css('background-color','#11BFAF');
+        if(sts==2){
+            $('.tips span').css('background-color','red');
+        }
+        $('.tips span').text(data);
+        $('.tips,.bg_').fadeIn().delay(1000).fadeOut();
+    }	
+</script>
+<script type="text/javascript">
+	$(function(){
+		wait_=60;
+		// input
+		var mobileInput  = $('input[name=mobile]');
+		var smsCodeInput = $('input[name=sms_code]');
+		// var agreeInput   = $('input[name=agree]');
+		// btn
+		var sendSmsBtn = $('#sendSmsBtn');
+		var regBtn     = $('#regBtn');
+		
+		mobileInput.on('input', function(){
+			if(this.value.length == 11){
+				sendSmsBtn.css('background-color', '#11bfaf');
+			}else{
+				sendSmsBtn.css('background-color', '#CBF2F0');
+			}
+		});
+		
+		smsCodeInput.on('input', function(){
+			if(this.value.length == 6){
+				regBtn.attr('disabled', false);
+			}else{
+				regBtn.attr('disabled', true);
+			}
+		});
+		regBtn.on('click',function(){
+            if(isNull(mobileInput.val()) || mobileInput.val().length != 11){
+                tips('请输入正确的手机号',2);
+                return false;
+            }
+            if(isNull(smsCodeInput.val())){
+                tips('请输入验证码',2);
+                return false;
+            }			
+			$.ajax({
+		        type: 'post',
+		        dataType: 'json',
+		        data:{'mobile':mobileInput.val(),'sms_code':smsCodeInput.val()},
+		        url: '__CONTROLLER__/editMobile',
+		        success: function (data) {
+					tips(data.msg);
+					if(data.status == 1){
+						setTimeout('window.location.reload()',1000);
+					}
+		        }, 
+		        error: function(XMLHttpRequest, textStatus, errorThrown) {
+					tips('请勿重复提交！',2);
+                }
+		    });
+		});
+		// agreeInput.on('change', function(){
+		// 	if(agreeInput[0].checked && smsCodeInput.val().length){
+		// 		regBtn.attr('disabled', false);
+		// 	}else{
+		// 		regBtn.attr('disabled', true);
+		// 	}
+		// });
+		
+		// 发送验证码
+		sendSmsBtn.on('click', function(){
+			var mobileNum = '{$userInfo.mobile}';
+			var mobileNew = mobileInput.val();
+			var phoneNum = $('input[name=phoneNum]').val();
+			if(isNull(mobileInput.val()) || mobileInput.val().length != 11){
+                return false;
+            }
+			$.ajax({
+		        type: 'post',
+		        dataType: 'json',
+		        data:{'phoneNum':phoneNum,'mobileNew':mobileNew},
+		        url: '__CONTROLLER__/verifyPhoneNum',
+		        success: function (data) {
+					if(data.status == 1){
+						$.get('{:U("Api/Sms/reg")}', {'mobile':mobileNew}, function(result){
+							if(!result.status){
+								tips(result.info,2);
+							}
+							time();
+						});
+					}else{
+						tips(data.info,2);
+					}
+		        }, 
+		        error: function(XMLHttpRequest, textStatus, errorThrown) {
+					tips('请勿重复提交！',2);
+                }
+		    });
+		});
+	});
+	function time() {
+		var obj = document.getElementById("sendSmsBtn");  
+        if (wait_ == 0) {  
+            obj.removeAttribute("disabled");            
+            obj.value="获取验证码";  
+            wait_ = 60;
+            $('#sendSmsBtn').css('background-color', '#11bfaf');  
+        } else { 
+        	$('#sendSmsBtn').css('background-color', '#CBF2F0'); 
+            obj.setAttribute("disabled", true);  
+            obj.value="重新发送(" + wait_ + ")";  
+            wait_--;  
+            setTimeout(function() {  
+                time()  
+            },  
+            1000)  
+        }  
+    }
+
+	//下面用于图片上传预览功能
+	function setImagePreview(avalue) {
+
+		var docObj = document.getElementById("doc");
+
+		var imgObjPreview = document.getElementById("preview");
+		if (docObj.files && docObj.files[0]) {
+//火狐下，直接设img属性
+			imgObjPreview.style.display = 'black';
+			imgObjPreview.style.width = '100px';
+			imgObjPreview.style.height = '100px';
+//imgObjPreview.src = docObj.files[0].getAsDataURL();
+
+//火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
+			imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+		}
+		else {
+//IE下，使用滤镜
+			docObj.select();
+			var imgSrc = document.selection.createRange().text;
+			var localImagId = document.getElementById("localImag");
+//必须设置初始大小
+			localImagId.style.width = "280px";
+			localImagId.style.height = "200px";
+//图片异常的捕捉，防止用户修改后缀来伪造图片
+			try {
+				localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+				localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+			}
+			catch (e) {
+				alert("您上传的图片格式不正确，请重新选择!");
+				return false;
+			}
+			imgObjPreview.style.display = 'block';
+			document.selection.empty();
+		}
+		return true;
+	}
+	function setImagePreview2(avalue) {
+
+		var docObj = document.getElementById("doc2");
+
+		var imgObjPreview = document.getElementById("preview2");
+		if (docObj.files && docObj.files[0]) {
+//火狐下，直接设img属性
+			imgObjPreview.style.display = 'black';
+			imgObjPreview.style.width = '160px';
+			imgObjPreview.style.height = '180px';
+//imgObjPreview.src = docObj.files[0].getAsDataURL();
+
+//火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
+			imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+		}
+		else {
+//IE下，使用滤镜
+			docObj.select();
+			var imgSrc = document.selection.createRange().text;
+			var localImagId = document.getElementById("localImag");
+//必须设置初始大小
+			localImagId.style.width = "280px";
+			localImagId.style.height = "200px";
+//图片异常的捕捉，防止用户修改后缀来伪造图片
+			try {
+				localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+				localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+			}
+			catch (e) {
+				alert("您上传的图片格式不正确，请重新选择!");
+				return false;
+			}
+			imgObjPreview.style.display = 'block';
+			document.selection.empty();
+		}
+		return true;
+	}
+
+</script>
+</block>

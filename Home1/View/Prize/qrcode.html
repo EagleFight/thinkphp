@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <title>添加客服</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/home/prize/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/home/prize/css/qrcode.css?v={:time()}">
+</head>
+<body>
+    <div class="content">
+        <div class="kefu">
+            <div class="headimg">
+                <img src="{$kefu.headimg}" alt="">
+            </div>
+            <div class="detail">
+                <p class="nickname">
+                    <span>{$kefu.nickname}</span>
+                    <switch name="kefu.sex">
+                        <case value="1"><img src="__PUBLIC__/home/prize/img/girl.png" alt=""></case>
+                        <case value="2"><img src="__PUBLIC__/home/prize/img/boy.png" alt=""></case>
+                        <default />
+                    </switch>                    
+                </p>
+                <p class="addr">{$kefu.area}</p>
+            </div>
+        </div>
+        <div class="code">
+            <img src="{$kefu.wx_codeimg}" alt="">
+        </div>
+        <div class="explain">
+            <p>长按二维码添加微信客服，红包稍后将由客服为您送上</p>
+        </div>
+    </div>
+<!--     <div class="btn">
+        <a href="javascript:;"><span>确 定</span></a>        
+    </div> -->
+</body>
+</html>
+<!-- <script type="text/javascript" src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        $(" input[name='convert'] ").focus(function() { 
+            $(".changeBtn a").css("background-color","#00C988");
+        });
+    });
+    function tips(data){
+        $('.tips').show();
+        $('.tips').text(data);
+        setTimeout('$(".tips").hide()',1500);       
+    }     
+</script> -->

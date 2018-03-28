@@ -1,0 +1,26 @@
+<div class="reply">
+	<div class="reply_list">
+		<div class="msg_headImg">
+			<eq name="msglist['user_id']" value="0">
+				<a target="_blank" href="javascript:;"><img src="/Public/pc/images/default.jpg" alt=""></a>		
+			<else/>
+			<a target="_blank" href="{:U('Other/index', array('uid'=>$msglist['user_id']))}"><img src="{:get_user_info($msglist['user_id'], 'avatar')}" alt=""></a>
+			</eq>
+		</div>
+		<div class="reply_msg">
+			<div class="msg_user">
+				<eq name="msglist['user_id']" value="0">
+					<p>{$msglist['visitor']}</p>
+				<else/>
+					<p>{:get_user_info($msglist['user_id'], 'nickname')}</p>
+				</eq>
+				<p>{$msglist['post_time']|time_tran=###}</p>
+				<p class="msg_text">{$msglist['content']}</p>
+			</div>
+		</div>												
+	</div>											
+<!-- 	<div class="showMore">
+		<hr>
+		<p>查看更多</p>
+	</div> -->
+</div>

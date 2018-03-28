@@ -1,0 +1,55 @@
+<extend name="User:public" />
+<block name="title">
+	<title>我的收藏</title>
+</block>
+<block name="style">
+	<link rel="stylesheet" href="__PUBLIC__/pc/css/mycolsub.css?v={:time()}" />
+</block>
+<block name="member">
+
+		<div class="collect">
+			<div class="m_head">
+				我的收藏
+			</div>
+			<div class="content radius">
+		        <div class="hot-content">
+		            <ul class="hot-ul">
+		                <volist name="list" id="vo" empty="$empty">
+		                    <li class="one-hot-li">
+		                        <!--文字多图-->
+		                        <php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>
+								<a target="_blank" href="{:U('Detail/index', array('article' => $vo['category_id'],'id'=>$vo['article_id']))}">
+		                        <img class="one-hot-img" src="{$cover_arr[0]|get_cover}" />
+									</a>
+		                        <div>
+		                            <p class="hot-title"><a target="_blank" href="{:U('Detail/index', array('article' => $vo['category_id'],'id'=>$vo['article_id']))}">{$vo.title}</a></p>
+		                            <p class="hot-intro"><a>{:get_str($vo['digest'],0,58)}</a></p>
+		                            <span class="hot-message">
+		                                <a href="javascript:void(0);">{:get_category_info($vo['category_id'],'title')}</a>
+		                            </span>
+		                            <span class="hot-name">
+		                                    <a target="_blank" href="{:U('Other/index', array('uid' => $vo['user_id']))}">
+		                                 <img src="{:get_user_info($vo['user_id'], 'avatar')}" alt="avatar">{:get_user_info($vo['user_id'], 'nickname')}
+		                                     </a>
+		                                </span>
+		                            <span class="hot-time">{$vo['post_time']|time_tran=###,"Y-m-d"}</span>
+		                        </div>
+		                        <div class="hot-zhan">
+		                            <span class="look"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/look.png"></a>{$vo.view_num}</span>
+		                            <span class="xin"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/xin.png"></a>{$vo.like_num}</span>
+		                        </div>
+		                    </li>
+		                </volist>
+		            </ul>
+					<ul class="page">
+						{$page}
+					</ul>
+		        </div>	
+			</div>				
+		</div>
+
+</block>
+
+<block name="script">
+	
+</block>

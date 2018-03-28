@@ -1,0 +1,255 @@
+<extend name="Public:userbase" />
+<block name="style">
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/article.css" />
+</block>
+<block name="member">
+    <div class="member">
+        <img class="member_banner" src="__PUBLIC__/pc/images/banner_1.png">
+        <div class="member_left">
+            <div class="head_portrait">
+                <img class="head_portrait_pic" src="{$userInfo.avatar}">
+                <p class="name">{$userInfo.nickname}</p>
+                <span class="attestation">
+                <switch name="userInfo.is_auth">
+                    <case value="0">未认证</case>
+                    <case value="1">认证中</case>
+                    <case value="2">已认证</case>
+                    <default />
+                </switch>
+                </span>
+                <div class="plan">
+                    资料完善度
+                    <div class="plan1">
+                        <p style="width: 50%"></p>
+                    </div>
+                </div>
+            </div>
+            <ul class="member_nav">
+                <a href="{:U('User/index')}">
+                    <li><span></span>个人主页</li>
+                </a>
+                <a href="{:U('User/message')}">
+                    <li><span class="new"></span>我的信息</li>
+                </a>
+                <a href="{:U('User/subscribe')}">
+                    <li><span></span>我的订阅</li>
+                </a>
+                <a href="{:U('User/answer')}">
+                    <li><span></span>我的回答</li>
+                </a>
+                <a href="{:U('User/mycollect')}">
+                    <li><span></span>我的收藏</li>
+                </a>
+                <a href="{:U('User/myhb')}">
+                    <li><span></span>我的H币</li>
+                </a>
+                <a href="{:U('Article/index')}">
+                    <li class="active"><span></span>我的发布</li>
+                </a>
+                <a href="{:U('User/addr')}">
+                    <li><span></span>我的地址</li>
+                </a>
+                <a href="{:U('User/manager')}">
+                    <li><span></span>账号管理</li>
+                </a>
+            </ul>
+        </div>
+        <div class="member_right">
+            <p class="member_right_title"> 我的发布</p>
+            <div class="content">
+                <ul class="classify">
+                    <a href="{:U()}">
+                        <li class="active">我要投稿<span></span></li>
+                    </a>
+                    <a href="{:U('Article/myarticle')}">
+                        <li>投稿管理<span></span></li>
+                    </a>
+                </ul>
+                <form action="{:U()}" method="post" name="myform" class="article" id="formId">
+                    <div>
+                        <label>标题</label>
+                        <input type="text" class="text-input" name="title" maxlength="40" min="3" placeholder="请输入文章标题">
+                    </div>
+                    <div>
+                        <label>简介</label>
+                        <input class="digest text-input" type="text" name="digest" maxlength="150" min="10" placeholder="请填写文章标题。简介中不得包含令人反感的信息，且长度应在10到150个字之间">
+                    </div>
+                    <div>
+                        <label>文章类型</label>
+                        <select name="category_id" class="category text-input">
+                            <option value="">请选择：</option>
+                            <volist name="nav_list" id="vo">
+                                <option value="{$vo.category_id}">{$vo.title}</option>
+                            </volist>
+                        </select>
+                    </div>
+                    <div class="pic-file-item">
+                        <label>文章封面</label>
+                        <!--<div class="pic-file" id="file" onclick="javascript:setImagePreview();">-->
+                        <!--添加封面图-->
+                        <!--</div>-->
+                        <!--<div class="controls pic-file">-->
+                            <!--<div id="_upload_2">-->
+                                <!--<div id="file_upload_1-queue" class="uploadify-queue"></div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+
+                        <div class="controls pic-file">
+                            <div id="_upload_2">
+                                <div id="upload-blob"   class="uploadify-queue"></div>
+                            </div>
+                        </div>
+
+
+                        <p class="size">支持 jpg/png/gif格式，不超过2M</p>
+                        <p class="clear"></p>
+                        <input name="cover_media_ids" value="" type="hidden" class="cover_media_ids">
+                        <div class="preview-pic">
+                            <img src="" class="uploadify-queue" id="preview1" style="width: 249px; height: 135px;">
+                            <input type="file" name="default_image[]"  id="doc1" value="" onchange="javascript:setImagePreview(1);">
+
+                        </div>
+                    </div>
+                    <div>
+                        <label>正文</label>
+                        <include file='Public/libs/ueditor/index.html' type='' />
+                        <p class="clear"></p>
+                    </div>
+                    <div class="submit">
+                        <label></label>
+                        <input class="submit-bottom-val" type="submit" onclick="return check(this.form)" value="提交">
+                        <!--<button>提交</button>-->
+                        <p>确认文本信息无误，点击“提交”按钮提交</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript">
+    function check(form) {
+        //            $(".submit-bottom-val").attr("disabled","false");
+        //            $(".submit-bottom-val").css("background","#999999");
+        if (form.title.value == '') {
+            alert("标题必填!");
+            form.title.focus();
+            return false;
+        }
+        if (form.digest.value == '') {
+            alert("简介必填!");
+            form.digest.focus();
+            return false;
+        }
+        if (form.category_id.value == '') {
+            alert("类型必选!");
+            form.category_id.focus();
+            return false;
+        }
+
+        return false;
+
+
+    }
+    var dataID = " ";
+//    $(function() {
+//        $('#_upload_2').Huploadify({
+//            uploader: '/home/Article/upload',
+//            fileTypeExts: '*.gif;*.jpg;*.jpeg;*.png;*.bmp',
+//            fileSizeLimit: 5 * 1024,
+//            buttonText: '上传图片',
+//            onUploadComplete: function(file, data) {
+//                images = $('.preview-pic img');
+//                if (images.length < 4) {
+//                    var data = $.parseJSON(data);
+//                    if (data.error == 1) {
+//                        $.alertMessager(data.message, 'danger');
+//                    } else {
+//                        var new_img = '<div class="pic-file-">' + '<img class="img" src="' + data.url + '" data-id="' + data.id + '">' +
+//                            '<i class="fa fa-times-circle remove-picture"></i>' + '</div>';
+//
+//                        $('.preview-pic').append(new_img);
+//                        $(".img").each(function() {
+//                            dataID = +data.id + "," + $('.cover_media_ids').val();
+//                        });
+//                        $('.cover_media_ids').attr('value', dataID);
+//                    }
+//                } else {
+//                    alert("最多上传4张");
+//                    return false;
+//                }
+//
+//
+//            }
+//        });
+//    });
+//    //删除图片
+//    $('body').on('click', '#_preview_2 .remove-picture', function() {
+//        var ready_for_remove_id = $(this).closest('.img-box').find('img').attr('data-id'); //获取待删除的图片ID
+//        if (!ready_for_remove_id) {
+//            $.alertMessager('错误', 'danger');
+//        }
+//        $('#_preview_2 input').val('') //删除后覆盖原input的值为空
+//        $(this).closest('.img-box').remove(); //删除图片预览图
+//    });
+var i=1;
+    $(".pic-file").click(function(){
+
+    var new_img ='<img  src="" class="uploadify-queue" id="preview'+i+'">' +
+            '<input type="file" name="default_image[]" style="display: none" id="doc'+i+'" value="" onchange="javascript:setImagePreview();" >'
+        $('.preview-pic').append(new_img);
+        $("#doc"+i).click();
+
+
+    });
+
+
+    //下面用于图片上传预览功能
+    //下面用于图片上传预览功能
+    function setImagePreview() {
+//  alert(123);
+        var docObj = document.getElementById("doc1");
+
+        var imgObjPreview = document.getElementById("preview1");
+        if (docObj.files && docObj.files[0]) {
+//火狐下，直接设img属性
+            imgObjPreview.style.display = 'black';
+            imgObjPreview.style.width = '249px';
+            imgObjPreview.style.height = '279px';
+//imgObjPreview.src = docObj.files[0].getAsDataURL();
+
+//火狐7以上版本不能用上面的getAsDataURL()方式获取，需要一下方式
+            imgObjPreview.src = window.URL.createObjectURL(docObj.files[0]);
+        }
+        else {
+//IE下，使用滤镜
+            docObj.select();
+            var imgSrc = document.selection.createRange().text;
+            alert(imgSrc);
+            var localImagId = document.getElementById("preview1");
+//			console.log(localImagId);
+//必须设置初始大小
+            localImagId.style.width = "249px";
+            localImagId.style.height = "279px";
+//图片异常的捕捉，防止用户修改后缀来伪造图片
+            try {
+                localImagId.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
+                localImagId.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = imgSrc;
+            }
+            catch (e) {
+                alert("您上传的图片格式不正确，请重新选择!");
+                return false;
+            }
+            imgObjPreview.style.display = 'block';
+            document.selection.empty();
+        }
+        return true;
+    }
+
+
+    </script>
+    <!-- huploadify -->
+    <script src="/Public/libs/jQuery-Huploadify/jquery.Huploadify.js"></script>
+    <script type="text/javascript">
+    </script>
+</block>

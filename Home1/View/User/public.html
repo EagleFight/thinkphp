@@ -1,0 +1,144 @@
+<html lang="zh-cmn-Hans">
+<head>
+    <meta  content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" >
+
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/reset.css" />
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/member.css" />
+    <link rel="shortcut icon" href="__PUBLIC__/pc/images/logo.ioc" type="image/x-icon">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+    <block name="title"></block>
+    <script type="text/javascript" src="__PUBLIC__/pc/js/jquery-2.1.0.js"></script>
+    <block name="style"></block>
+</head>
+
+<body>
+<block name="head" >
+    <div class="head-block-fixed">
+        <div class="head-block">
+            <div class="head">
+                <div class="head-left">
+                    <a href="{:U('Index/index')}" ><i class="logo"></i></a>
+                    <ul class="nav">
+                        <!--<li class="active"><a href="{:U('Index/index')}" >首页</a></li>-->
+                        <!--<li><a href="index.html">问答</a></li>-->
+                        <!--<li><a href="index.html">学习</a></li>-->
+                        <!--<li><a href="index.html">活动</a></li>-->
+                        <!--<li><a href="index.html">工具</a></li>-->
+                        <!--<li><a href="index.html">社区</a></li>-->
+                    </ul>
+                </div>
+                <div>
+                    <div class="head-right">
+                        <a href="javascript:void(0);"><img class="portrait" src="{$userInfo.avatar}"></a>
+                        <!--<p class="news"><span>10</span></p>-->
+                        <ul class="question">
+                            <a href="{:U('User/index')}"><li>个人中心</li></a>
+                            <a href="{:U('User/message')}"><li>我的消息</li></a>
+                            <a href="{:U('User/subscribe')}"><li>我的订阅</li></a>
+                            <!--<a href="{:U('User/ask')}"><li>我的问答</li></a>-->
+                            <a href="{:U('User/mycollect')}"><li>我的收藏</li></a>
+                            <a href="{:U('User/myhb')}"><li>我的H币</li></a>
+
+                            <a href="{:U('Article/myarticle')}"><li>我的发布</li></a>
+                            <a href="{:U('User/addr')}"><li>我的地址</li></a>
+                            <a href="{:U('User/manager')}"><li>账号管理</li></a>
+                            <a href="{:U('Public/logout')}"><li>退出登录</li></a>
+                        </ul>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</block>
+
+
+
+
+
+
+
+    <div class="member">
+        <img  class="member_banner" src="__PUBLIC__/pc/images/banner_1.png">
+        <div class="member_left">
+            <div class="head_portrait">
+                <img class="head_portrait_pic" src="{$userInfo.avatar}">
+                <p class="name">{$userInfo.nickname}</p>
+	            <span class="attestation">
+	            <switch name="userInfo.is_auth">
+                    <case value="0">未认证</case>
+                    <case value="1">认证中</case>
+                    <case value="2">已认证</case>
+                    <default />
+                </switch>
+	            </span>
+                <div class="plan">
+                    资料完善度
+                    <div class="plan1"><p style="width: {$score}" title="资料完善度:{$score}"></p></div>
+
+                </div>
+            </div>
+            <ul class="member_nav">
+                <a href="{:U('User/index')}"><li <if condition="ACTION_NAME eq 'index' "> class="active" </if>><span></span>个人主页</li></a>
+                <a href="{:U('User/message')}"><li <if condition="ACTION_NAME eq 'message' "> class="active" </if>><span ></span>我的信息</li></a>
+                <a href="{:U('User/subscribe')}"><li <if condition="ACTION_NAME eq 'subscribe' || ACTION_NAME eq 'subpeople' || ACTION_NAME eq 'mysubsrcibe' "> class="active" </if>><span></span>我的订阅</li></a>
+                <!--<a href="{:U('User/ask')}"><li <if condition="ACTION_NAME eq 'ask' || ACTION_NAME eq 'answer'"> class="active" </if>><span></span>我的问答</li></a>-->
+                <a href="{:U('User/mycollect')}"><li <if condition="ACTION_NAME eq 'mycollect'   "> class="active" </if>><span></span>我的收藏</li></a>
+                <a href="{:U('User/myhb')}"><li <if condition="ACTION_NAME eq 'myhb' "> class="active" </if>><span></span>我的H币</li></a>
+                <a href="{:U('Article/myarticle')}"><li <if condition="ACTION_NAME eq 'myarticle' || ACTION_NAME eq 'publish'  "> class="active" </if>><span></span>我的发布</li></a>
+                <a href="{:U('User/addr')}"><li <if condition="ACTION_NAME eq 'addr' "> class="active" </if>><span ></span>我的地址</li></a>
+                <a href="{:U('User/manager')}"><li <if condition="ACTION_NAME eq 'manager' "> class="active" </if>><span></span>账号管理</li></a>
+            </ul>
+        </div>
+        <block name="member"></block>
+
+        </div>
+
+<div class="public-foot">
+    <div class="btn-foot">
+        <p class="logo-ft"></p>
+        <p class="purpose">护士家园 — 以慈善助力为初心，诚挚服务为宗旨。</p>
+        <p class="purpose">是关爱：陪伴护士成长的温馨家园；是涵养：共创白衣精神的沃土良园；是分享：展示护士风采的交流平台。</p>
+    </div>
+    <div class="foot-nav">
+        <p class="foot-img">
+            <img src="__PUBLIC__/pc/images/wxcode.jpg" >
+            <script src="http://www.bcpcn.com/bcptags/05530840.js?v=1.0"></script>
+        </p>
+        <ul>
+            <li><a target="_blank" href="{:U('Public/about')}">关于我们</a></li>
+            <li><a href="#">慈善基金</a></li>
+            <li><a href="#">商务合作</a></li>
+            <li><a href="#">人才招聘</a></li>
+        </ul>
+        <p class="foot-tel">
+            <span>四川护博医疗科技有限公司</span>
+            <span>电话：{:get_config('WEB_SITE_TEL')}</span>
+        </p>
+        <p class="foot-addr">
+            <span>地址：{:get_config('WEB_SITE_ADDR')}</span>
+            <span>邮箱：{:get_config('WEB_SITE_EMAILE')}</span>
+        </p>
+        <p class="foot-records">{:get_config('WEB_SITE_COPYRIGHT')}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:get_config('WEB_SITE_ICP')}  </p>
+    </div>
+</div>
+<block name="script">
+
+</block>
+<script>
+    //    下面代码只适用于平板点击出现下拉
+    $(".portrait").click(function () {
+        var isHover= $("ul").is('.isQuestion');
+        if(isHover){
+            $(".question").removeClass("isQuestion");
+        }else{
+            $(".question").addClass("isQuestion");
+        }
+    });
+</script>
+</body>
+
+</html>

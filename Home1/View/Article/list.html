@@ -1,0 +1,46 @@
+<ul class="hot-ul">
+    <if condition="!$list">
+        <p class="list-not">暂无投稿!</p>
+    </if>
+    <volist name="list" id="vo">
+        <li class="one-hot-li">
+            <!--文字多图-->
+            <php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>
+            <a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+                <img class="one-hot-img" src="{$cover_arr[0]|get_cover}" />
+                </a>
+            <div class="new-hot-li">
+                <p class="hot-title"><a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{$vo.title}</a></p>
+                <p class="hot-intro">{:get_str($vo['digest'],0,50)}</p>
+                                <span class="hot-message">
+                                    <a href="javascript:void(0);">{:get_category_info($vo['category_id'],'title')}</a>
+                                </span>
+                                <span class="hot-name">
+                                        <a href="javascript:void(0);">
+                                            <img src="{:get_user_info($vo['user_id'], 'avatar')}" alt="avatar">{:get_user_info($vo['user_id'], 'nickname')}
+                                        </a>
+                                    </span>
+                <span class="hot-time">{$vo['post_time']|time_tran=###,"Y-m-d"}</span>
+                <div class="hot-zhan">
+                    <span class="look"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/look.png"></a>{$vo.view_num}</span>
+                    <span class="xin"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/xin.png"></a>{$vo.collect_num}</span>
+                    <span class="comment"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/sn.png"></a>{$vo.comment_num}</span>
+                    <span class="zan"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/zan_pre.png"></a>{$vo.like_num}</span>
+                </div>
+            </div>
+
+            <if condition="$vo['is_pass'] eq '1' ">
+                <p class="check ">通过</p>
+            </if>
+            <if condition="$vo['is_pass'] eq '2' ">
+                <p class="check checkNo">未通过</p>
+            </if>
+            <if condition="$vo['is_pass'] eq '0' ">
+                <p class="check checkYes">审核中</p>
+            </if>
+        </li>
+    </volist>
+</ul>
+<ul class="page">
+    {$page}
+</ul>

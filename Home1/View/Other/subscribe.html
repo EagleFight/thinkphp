@@ -1,0 +1,95 @@
+<extend name="other:left" />
+<block name="title">
+    <title>Ta的订阅</title>
+</block>
+<block name="style">
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/article.css" />
+</block>
+
+<block name="member">
+        <div class="member_right">
+            <p class="member_right_title"> Ta的订阅</p>
+            <div class="content" style="    padding-top: 10px;">
+                <div class="hot-content">
+                    <ul class="hot-ul">
+                        <if condition="!$list">
+                            <p class="list-not">暂无订阅!</p>
+                        </if>
+                        <!--<li class="subscribe">-->
+                            <!--<img class="one-hot-img" src="__PUBLIC__/pc/images/" />-->
+                        <!--</li>-->
+                        <volist name="list" id="vo">
+                            <li class="one-hot-li subscribe">
+                                <!--文字多图-->
+                                <a  href="{:U('index', array('uid'=>$vo['to_user_id']))}">
+                                    <img class="one-hot-img " src="{:get_user_info($vo['to_user_id'], 'avatar')}" alt="avatar">
+</a>
+                                <p class="nickname"><a  href="{:U('index', array('uid'=>$vo['to_user_id']))}">{:get_user_info($vo['to_user_id'], 'nickname')}</a>
+                                  <php>$is_auth=get_user_info($vo['to_user_id'], 'is_auth')</php>
+                                    <switch name="is_auth">
+                                        <case value="0"> </case>
+                                        <case value="1"> <span class="approve">认证中</span></case>
+                                        <case value="2"> <span class="approve">已认证</span></case>
+                                        <default />
+                                    </switch>
+
+
+                                </p>
+                                <div class="take">
+                                    <php>$job=get_job($vo['to_user_id'], '');</php>
+                                    <p class="job"><if condition="$job['hospital']">{$job.hospital}&nbsp;&nbsp;{$job.department}/{$job.title}<else/>职位还未填写</if></p>
+                                    <p>投稿：<span>{:articleCount($vo['to_user_id'])}</span></p>
+                                    <!--<p>回答：<span>28</span></p>-->
+                                    <!--<p>提问：<span>28</span></p>-->
+                                </div>
+                                    <p class="signature"><if condition="$vo['signature']">{$vo.signature}<else/>这个人懒，暂无个性签名</if></p>
+                                <php>$sub=isSubscribe($vo['to_user_id'],$user_id)</php>
+                                <switch name="sub">
+                                    <case value="0"><a href="javascript:void(0);" data-id="0" data-uid="{$vo['to_user_id']}"  class="is-sub">订阅</a></case>
+                                    <case value="1"><a href="javascript:void(0);" data-id="1"data-uid="{$vo['to_user_id']}" class="is-sub">已订阅</a></case>
+                                </switch>
+
+
+
+                            </li>
+                        </volist>
+                    </ul>
+                    <ul class="page">
+                        {$page}
+                    </ul>
+                </div>
+            </div>
+        </div>
+</block>
+<block name="script">
+    <script>
+
+        $(".is-sub").click(function (){
+            var uId = $(this).attr("data-uid");
+            var status=$(this).attr("data-id");
+            var sub=$(this);
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data:{'uid':uId,'status':status},
+                url: '__CONTROLLER__/subscibe',
+                success: function (data) {
+                    if(data.status==200){
+                        if(status=="0"){
+
+                            $(sub).html('已订阅');
+                            $(sub).attr('data-id',1);
+                        }else{
+
+                            $(sub).html('订阅');
+                            $(sub).attr('data-id',0);
+                        }
+                    }else{
+                        tips(data.msg);
+                        return false;
+                    }
+                }
+            })
+        })
+    </script>
+</block>

@@ -1,0 +1,63 @@
+<extend name="other:left" />
+<block name="title">
+    <title>Ta的收藏</title>
+</block>
+<block name="style">
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/article.css" />
+    <!--<link rel="stylesheet" href="__PUBLIC__/pc/css/index.css" />-->
+</block>
+<block name="member">
+
+
+        <div class="member_right">
+            <p class="member_right_title"> Ta的收藏</p>
+            <div class="content" style="    padding-top: 10px;">
+
+                <div class="hot-content">
+
+
+                    <ul class="hot-ul">
+                        <if condition="!$list">
+                            <p class="list-not">暂无收藏!</p>
+                        </if>
+                        <volist name="list" id="vo">
+                            <li class="one-hot-li">
+                                <!--文字多图-->
+                                <php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>
+                                <a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+                                    <img class="one-hot-img" src="{$cover_arr[0]|get_cover}" />
+                                    </a>
+                                <div>
+                                    <p class="hot-title"><a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{$vo.title}</a></p>
+                                    <p class="hot-intro">{:get_str($vo['digest'],0,45)}</p>
+                                <span class="hot-message">
+                                    <a href="javascript:void(0);">{:get_category_info($vo['category_id'],'title')}</a>
+                                </span>
+                                <span class="hot-name">
+                                        <a href="{:U('index', array('uid'=>$vo['user_id']))}">
+                                            <img src="{:get_user_info($vo['user_id'], 'avatar')}" alt="avatar">{:get_user_info($vo['user_id'], 'nickname')}
+                                        </a>
+                                    </span>
+                                    <span class="hot-time">{$vo['post_time']|time_tran=###,"Y-m-d"}</span>
+
+                                </div>
+                                <div class="hot-zhan">
+                                    <span class="look"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/look.png"></a>{$vo.view_num}</span>
+                                    <span class="xin"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/xin.png"></a>{$vo.collect_num}</span>
+                                    <span class="comment"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/sn.png"></a>{$vo.comment_num}</span>
+                                    <span class="zan"><a href="javascript:void(0);"><img src="__PUBLIC__/pc/images/zan_pre.png"></a>{$vo.like_num}</span>
+                                </div>
+                            </li>
+                        </volist>
+                    </ul>
+                    <ul class="page">
+                        {$page}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+</block>
+<block name="script">
+
+</block>

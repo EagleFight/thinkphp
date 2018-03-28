@@ -1,0 +1,103 @@
+<extend name="User:public" />
+<block name="title">
+    <title>我的投稿</title>
+</block>
+<block name="style">
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/article.css" />
+    <!--<link rel="stylesheet" href="__PUBLIC__/pc/css/index.css" />-->
+</block>
+<block name="member">
+
+        <div class="member_right">
+            <p class="member_right_title"> 我的订阅</p>
+            <div class="content">
+                <ul class="classify mysubsrcibe">
+                    <a href="{:U('subscribe')}">
+                        <li >订阅消息<span></span></li>
+                    </a>
+                    <a href="{:U('')}">
+                        <li class="active">我订阅的人({$from_user_id|default=0})<span></span></li>
+                    </a>
+                    <a href="{:U('mysubsrcibe')}">
+                        <li >我的粉丝({$to_user_id|default=0})<span></span></li>
+                    </a>
+                </ul>
+                <div class="hot-content">
+
+                    <ul class="hot-ul">
+                        <if condition="!$toUserIdArr">
+                            <p class="list-not">暂无订阅!</p>
+                        </if>
+                        <!--<li class="subscribe">-->
+                        <!--<img class="one-hot-img" src="__PUBLIC__/pc/images/" />-->
+                        <!--</li>-->
+                        <volist name="toUserIdArr" id="vo">
+                            <li class="one-hot-li subscribe ">
+                                <!--文字多图-->
+                                <a  target="_blank" href="{:U('Other/index', array('uid'=>$vo['to_user_id']))}">
+                                <img class="one-hot-img subpeople-img " src="{:get_user_info($vo['to_user_id'], 'avatar')}" alt="avatar">
+</a>
+                                <p class="nickname">
+                                    <a  target="_blank" href="{:U('Other/index', array('uid'=>$vo['to_user_id']))}">{:get_user_info($vo['to_user_id'], 'nickname')}</a>
+                                    <php>$is_auth=get_user_info($vo['to_user_id'], 'is_auth') ;</php>
+                                    <switch name="is_auth">
+                                        <case value="0"></case>
+                                        <case value="1"><span class="approve">认证中</span></case>
+                                        <case value="2"><span class="approve">已认证</span></case>
+                                    </switch>
+
+
+                                    <php>$job=get_job($vo['to_user_id'], '');</php>
+                                <span class="nickname-job"><if condition="$job['hospital']">{$job.hospital}&nbsp;&nbsp;{$job.department}/{$job.title}<else/>职位还未填写</if></span>
+                                </p>
+
+                                <p class="signature subpeople-signature"><if condition="$vo['signature']">{$vo.signature}<else/>这个人懒，暂无个性签名</if></p>
+                                <div class="take subpeople-take">
+                                    <php>$job=get_job($vo['to_user_id'], '');</php>
+                                    <p>投稿：<span>{:articleCount($vo['to_user_id'])}</span></p>
+                                    <!--<p>回答：<span>28</span></p>-->
+                                    <!--<p>提问：<span>28</span></p>-->
+                                </div>
+                                <php>$sub=isSubscribe($vo['to_user_id'],$user_id)</php>
+
+                                   <a href="javascript:void(0);"  data-uid="{$vo['to_user_id']}"  class="is-sub">取消订阅</a>
+
+
+
+
+
+                            </li>
+                        </volist>
+                    </ul>
+                    <ul class="page">
+                        {$page}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+</block>
+<block name="script">
+    <script type="text/javascript">
+        $(".is-sub").click(function () {
+var parThis=$(this);
+            var id=$(this).attr("data-uid");
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                data:{"to_user_id":id},
+                url: "{:U(subscibe)}",
+                success: function (data) {
+                    if(data.status==200){
+                        parThis.parent().remove();
+                    }else {
+                    alert(data.msg);
+                    }
+                }
+
+            })
+            $(".btn-active").removeClass("btn-active");
+            $(this).addClass("btn-active");
+        })
+    </script>
+</block>

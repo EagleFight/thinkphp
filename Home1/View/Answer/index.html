@@ -1,0 +1,118 @@
+<extend name="Public:base_densin" />
+
+<block name="docMeta">
+</block>
+
+<block name="docFile">
+<load href="__PUBLIC__/pc/answer/stylesheets/answer.css" />
+<js href='__PUBLIC__/home/scripts/functions.js' />
+<script type="text/javascript">
+window.onload=goTopPos;
+window.onresize=goTopPos;
+window.onscroll=function(){
+	goTopVisible();
+	if(p<4){
+		scrollLoad();
+	}else{
+		document.querySelector('.split_tips').onclick=loadmore;
+		window.onscroll=goTopVisible;
+	}
+}
+loading=false;
+p=1;
+function scrollLoad(){
+	visibleHeight=document.documentElement.clientHeight;
+	totalHeight=document.body.scrollHeight;
+	if(getScrollTop()+visibleHeight>=totalHeight-15)loadmore();
+}
+function goTopVisible(){
+	if(getScrollTop()>100){
+		if(document.querySelector('.btn_gototop_visible'))return;
+		addClass(document.querySelector('.btn_gototop'),'btn_gototop_visible');
+	}else{
+		if(!document.querySelector('.btn_gototop_visible'))return;
+		removeClass(document.querySelector('.btn_gototop_visible'),'btn_gototop_visible');
+	}
+}
+function goTopPos(){
+	top_obj=document.querySelector('main');
+	btn=document.querySelector('.btn_gototop');
+	right=top_obj.offsetLeft<btn.clientWidth+20?20:top_obj.offsetLeft-btn.clientWidth-20;
+	btn.style.right=right+'px';
+	btn.onclick=scrollTo;
+}
+function loadmore(){
+	if(loading)return;
+	obj=document.querySelector('.loading span');
+	obj.innerHTML='加载中...';
+	loading=true;
+	url='<switch name='Think.ACTION_NAME'>
+		<case value='category'>{:U("getIndexList?category_id=".$category_id,false,false)}</case>
+		<case value='today'>{:U("getIndexList?type=1",false,false)}</case>
+		<case value='myQuestion'>{:U("getIndexList?type=2",false,false)}</case>
+		<default />{:U("getIndexList",false,false)}
+	</switch>';
+	ajax(url+'/p/'+p,function(data){
+		end=data.end;
+		data=data.data;
+		if(!data || data.length<1){
+			obj.innerHTML='哼，我们是有底线的';
+		}else{
+			obj.innerHTML=(p<3)?'下滑到底部加载':'点击继续加载';
+			p++;
+			ul=document.querySelector('.index_list ul');
+			html='';
+			tpl='<li class="box_shadow">'+
+				'<a class="ctegory_tag" href="{:U("category",false,false)}/category_id/$category_id$">$category_name$</a><h3><a href="{:U("dtl",false,false)}/id/$id$">$title$</a></h3>'+
+				'<p class="thumb"><a href="{:U("dtl",false,false)}/id/$id$">$thumb$</a></p>'+
+				'<div>'+
+					'<span class="hits">$hits$</span>'+
+					'<a class="replies" href="{:U("dtl",false,false)}/id/$id$#reply">$reply_count$</a>'+
+					'$unread$'+
+					'<time>$create_time$</time>'+
+					'<a class="user" href="{:U("Other/answer",false,false)}/uid/$user_id$"><img src="$avatar$">$nickname$</a>'+
+				'</div>'+
+			'</li>';
+			for(i=0;i<data.length;i++){
+				if(data[i].media){
+					data[i].thumb='';
+					data[i].media.forEach(function(e){
+						data[i].thumb+='<img src="'+e+'">';
+					});
+				}
+				data[i].create_time=data[i].create_time.substr(0,10);
+				if(data[i].unread_count>0){
+					data[i].unread='<span class="unread">+'+data[i].unread_count+'</span>';
+				}
+				html+=tpl.tpl(data[i]);
+			}
+			ul.innerHTML+=html;
+			if(end){
+				obj.innerHTML='哼，我们是有底线的';
+			}else{
+				loading=false;
+				if(window.innerHeight>document.body.clientHeight)loadmore();
+			}
+		}
+	});
+}
+</script>
+</block>
+
+<block name="docBody">
+<div class="box_shadow btn_gototop"></div>
+<main>
+	<include file="left" />
+	<section class="index_list">
+		<eq name='Think.ACTION_NAME' value='category'>
+		<div class="box_shadow category">
+			<volist name="category" id="vo"><a href="{:U('category?category_id='.$vo['id'])}" <eq name='vo.id' value='$category_id'>class="cur"</eq>>{$vo.name}</a></volist>
+		</div>
+		</eq>
+		<ul></ul>
+		<p class="split_tips loading"><span></span></p>
+	</section>
+	<script type="text/javascript">loadmore();</script>
+	<include file="right" />
+</main>
+</block>

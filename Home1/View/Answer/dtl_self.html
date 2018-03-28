@@ -1,0 +1,227 @@
+<extend name="Public:base_densin" />
+
+<block name="docMeta">
+</block>
+
+<block name="docFile">
+<load href="__PUBLIC__/pc/answer/stylesheets/answer.css" />
+<js href='__PUBLIC__/home/scripts/functions.js' />
+<script type="text/javascript">
+window.onload=goTopPos;
+window.onresize=goTopPos;
+window.onscroll=goTopVisible;
+loading=false;
+p=1;
+comments_load_p={};
+reply_comments_tpl='';
+adopted_id=[];
+function goTopVisible(){
+	if(getScrollTop()>100){
+		if(document.querySelector('.btn_gototop_visible'))return;
+		addClass(document.querySelector('.btn_gototop'),'btn_gototop_visible');
+	}else{
+		if(!document.querySelector('.btn_gototop_visible'))return;
+		removeClass(document.querySelector('.btn_gototop_visible'),'btn_gototop_visible');
+	}
+}
+function goTopPos(){
+	top_obj=document.querySelector('main');
+	btn=document.querySelector('.btn_gototop');
+	right=top_obj.offsetLeft<btn.clientWidth+20?20:top_obj.offsetLeft-btn.clientWidth-20;
+	btn.style.right=right+'px';
+	btn.onclick=scrollTo;
+}
+function loadmore(){
+	if(loading)return;
+	obj=document.querySelector('.reply_loadmore span');
+	obj.innerHTML='加载中...';
+	loading=true;
+	ajax('{:U("getDtlReplyList?id=".$data["id"],false,false)}/p/'+p,function(data){
+		end=data.end;
+		data=data.data;
+		ul=document.querySelector('.replies_list');
+		if(!data || data.length<1){
+			obj.innerHTML='已经到底啦';
+			if(p==1)ul.innerHTML+='现在还没有人回复哦';
+			obj.parentNode.style.display='none';
+		}else{
+			obj.innerHTML='加载更多';
+			p++;
+			html='';
+			tpl='<li>'+
+				'<a href="{:U("Other/answer",false,false)}/uid/$user_id$" class="avatar"><img src="$avatar$"></a>'+
+				'<div class="reply_content">'+
+					'<div class="reply_info">'+
+						'$useful_a$'+
+						'<a href="{:U("Other/answer",false,false)}/uid/$user_id$">$nickname$</a>'+
+						'<time>$create_time$</time>'+
+						'<p class="text">$content$</p>'+
+						'<p class="thumb">$thumb$</p>'+
+						'<span class="comment_count" onClick="toggleCommentForm()">$comment_count$</span>'+
+					'</div>'+
+					'<div class="comment_form">'+
+						'<input type="text" class="comment_ipt">'+
+						'<input type="button" value="回复" class="comment_sub" onclick="commentSub($id$);">'+
+					'</div>'+
+					'<div class="reply_comments" $reply_comments_show$>'+
+						'<ul>'+
+							'$reply_comments$'+
+						'</ul>'+
+						'$comments_load_more$'+
+					'</div>'+
+				'</div>'+
+			'</li>';
+			reply_comments_tpl='<li>'+
+								'<a href="{:U("Other/answer",false,false)}/uid/$user_id$" class="avatar"><img src="$avatar$"></a>'+
+								'<div class="comments_content">'+
+									'<time>$create_time$</time>'+
+									'<a href="{:U("Other/answer",false,false)}/uid/$user_id$">$nickname$</a>'+
+									'<p>$content$</p>'+
+								'</div>'+
+							'</li>';
+			for(i=0;i<data.length;i++){
+			<eq name='data.state' value='1'>
+				if(data[i].adopted==1){
+					data[i].useful_a='<a href="javascript:;" class="useful selected">已采纳</a>';
+				}
+			<else />
+				data[i].useful_a='<a href="javascript:;" class="useful" onclick="adopted('+data[i].id+')">采纳</a>';
+			</eq>
+				if(data[i].media){
+					data[i].thumb='';
+					data[i].media.forEach(function(e){
+						data[i].thumb+='<img src="'+e+'">';
+					});
+				}
+				data[i].create_time=data[i].create_time.substr(0,10);
+				data[i].reply_comments_show='style="display:none"';
+				if(data[i].top2_comments.length>0){
+					data[i].reply_comments_show='';
+					reply_comments='';
+					data[i].top2_comments.forEach(function(e){
+						e.create_time=e.create_time.substr(0,10);
+						reply_comments+=reply_comments_tpl.tpl(e)
+					});
+					data[i].comments_load_more=data[i].top2_comments.length>=2?'<a href="javascript:;" class="comments_loadmore" onclick="commentsLoadMore('+data[i].id+');">查看更多</a>':'';
+					data[i].reply_comments=reply_comments;
+				}
+				html+=tpl.tpl(data[i]);
+			}
+			ul.innerHTML+=html;
+			if(end){
+				obj.innerHTML='已经到底啦';
+				obj.parentNode.style.color='#CCC';
+			}else{
+				loading=false;
+			}
+		}
+	});
+}
+function commentsLoadMore(id){
+	key='comment_'+id;
+	load_obj=event.currentTarget;
+	if(!comments_load_p[key])comments_load_p[key]=2;
+	ajax('{:U("getReplyCommentList",false,false)}/id/'+id+'/p/'+comments_load_p[key],function(data){
+		comments_load_p[key]++;
+		if(data.end){
+			load_obj.innerHTML='没有更多了';
+			load_obj.onclick=false;
+			load_obj.style.color='#CCC';
+		}
+		data=data.data;
+		html='';
+		for(i=0;i<data.length;i++){
+			data[i].create_time=data[i].create_time.substr(0,10);
+			html+=reply_comments_tpl.tpl(data[i]);
+		}
+		load_obj.parentNode.querySelector('ul').innerHTML+=html;
+	});
+}
+function toggleCommentForm(){
+	ele_index=getEleIndex(document.querySelectorAll('.reply_info span.comment_count'),event.currentTarget);
+	comment_form=document.querySelectorAll('.comment_form')[ele_index];
+	(comment_form.style.display=='block')?comment_form.style.display='':comment_form.style.display='block';
+}
+function commentSub(id){
+	sub_form=event.currentTarget.parentNode;
+	content=sub_form.querySelector('.comment_ipt').value;
+	ul_obj=event.currentTarget.parentNode.parentNode.querySelector('.reply_comments ul');
+	comment_form=event.currentTarget.parentNode;
+	form_ipt=comment_form.querySelector('.comment_ipt');
+	ajax('{:U("commentsReply",false,false)}/id/'+id,function(data){
+		if(data.state==1){
+			data.data.create_time=data.data.create_time.substr(0,10);
+			ul_obj.innerHTML=reply_comments_tpl.tpl(data.data)+ul_obj.innerHTML;
+			comment_form.style.display='';
+			form_ipt.value='';
+		}else{
+			alert(data.msg);
+		}
+	},false,false,'POST',true,'content='+encodeURIComponent(content));
+}
+function adopted(id){
+	key=in_array(id,adopted_id);
+	obj=event.currentTarget;
+	if(key===false){
+		if(adopted_id.length>=3){
+			alert('采纳答案不能超过3个哦，如需更换采纳的答案，请先取消不需要的采纳选择');
+			return false;
+		}
+		adopted_id.push(id);
+		addClass(obj,'useful');
+		addClass(obj,'adopted');
+		obj.innerHTML='<span></span>';
+	}else{
+		adopted_id.splice(key,1);
+		removeClass(obj,'usefull');
+		removeClass(obj,'adopted');
+		obj.innerHTML='采纳';
+	}
+	document.querySelector('.adopted_btn span').innerHTML=adopted_id.length;
+	if(adopted_id.length>0){
+		document.querySelector('.adopted_btn').style.bottom=0;
+	}else{
+		document.querySelector('.adopted_btn').style.bottom='';
+	}
+}
+function adopted_submit(){
+	if(adopted_id.length<=0){
+		alert('请选择采纳答案再提交');
+		return;
+	}else if(adopted_id.length>3){
+		alert('采纳操作错误');
+		return;
+	}else{
+		url='{:U("adopt?id=".$data["id"])}/replyid/'+adopted_id;
+		location.href=url;
+	}
+}
+</script>
+</block>
+
+<block name="docBody">
+<div class="box_shadow btn_gototop"></div>
+<main>
+	<section class="dtl">
+		<article class="box_shadow">
+			<h3>{$data.title}</h3>
+			<p class="dtl_reward">{$data.reward}</p>
+			<p class="dtl_user"><a class="user" href="{:U('Other/answer?uid='.$data['user_id'])}"><img src="{$data.avatar}">{$data.nickname}</a><time>{$data.create_time|strtotime|date='Y-m-d',###}</time></p>
+			<div class="dtl_content">{$data.content|editor_display}</div>
+			<p class="dtl_images">
+				<volist name='data.media' id='vo'>
+				<img src="{$vo}">
+				</volist>
+			</p>
+			<p class="dtl_count" id="reply"><span class="hits">{$data.hits}</span><a class="replies" href="#form1">{$data.reply_count}</a></p>
+		</article>
+		<p class="split_tips"><span>TA人回答</span></p>
+		<ul class="box_shadow replies_list">
+		</ul>
+		<a class="box_shadow reply_loadmore" onClick="loadmore();"><span>加载更多</span>（共{$data.reply_count}个回答）</a>
+		<script type="text/javascript">loadmore();</script>
+	</section>
+	<include file="right" />
+	<div class="adopted_btn">最多可采纳3个回答，当前已选择<span></span>个<a href="javascript:adopted_submit();">确认采纳</a></div>
+</main>
+</block>

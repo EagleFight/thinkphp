@@ -1,0 +1,672 @@
+<extend name="Public:base" />
+<block name="style">
+	<title>{$info.title}</title>
+	<link rel="stylesheet" href="__PUBLIC__/pc/css/detail.css" />
+</block>
+<block name="boby">
+	<div class="content">
+		<!--<div class="left radius">-->
+			<!--<p class="gotoWrite">去评论<span>({$comment|count}条)</span></p>-->
+		<!--</div>-->
+		<div class="middle">
+			<div class="article radius">
+				<if  condition="$preview">
+				<p style="color: red;text-align: center;">文章为预览，仅作者可看,所有操作不可用</p>
+					</if>
+				<div class="title">
+					<p>{$info.title}</p>
+				</div>
+				<div class="tag">
+					<p>
+						<span class="article_type">{$info.category_id|articleTypeName=###}</span>
+						<span class="edit_time">{$info['post_time']|time_tran=###,"Y-m-d"}</span>
+
+						<span class="look" title="阅读"><img src="/Public/pc/images/look.png">{$info.view_num}</span>
+						<span class="xin" title="收藏"><img src="/Public/pc/images/xin.png">{$info.collect_num}</span>
+					</p>
+				</div>
+				<div class="article_digest">
+					简介：{$info.digest}
+				</div>
+
+				<div class="article_content">
+					{$info.content|htmlspecialchars_decode}
+				</div>
+				<div class="come">
+
+					<p>
+						<a href="{:U('Other/index', array('uid'=>$info['user_id']))}">
+						<span class="img"><img src="{:get_user_info($info['user_id'], 'avatar')}" alt=""></span>
+						<span>{:get_user_info($info['user_id'], 'nickname')}</span>
+						</a>
+						<span>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<switch name="info.source">
+							<case value="0"></case>
+							<case value="1">原创</case>
+							<case value="2">来源：{$info.provenience}</case>
+						</switch>
+						</span>
+					</p>
+
+
+					<p class="intro">
+						<if  condition="$info['remark']">
+							{$info.remark}
+							<else/>
+							本文来自投稿，不代表护士家园立场，如若转载请标明出处
+						</if>
+					</p>
+					<p class="support reward">支持一下</p>
+				</div>
+				<if  condition="$preview neq 1">
+				<div class="share bdsharebuttonbox">
+					<a href="#" class="bds_qzone" onclick="share(1)" data-cmd="qzone" title="分享到QQ空间"></a>
+					<a href="#" class="bds_tsina" onclick="share(2)" data-cmd="tsina" title="分享到新浪微博"></a>
+					<p class="wx-custom" onclick="share(3)"  title="分享到微信"></p>
+					<p class="share_r">
+						<span data-id="{$info.is_like}" id="like_num" like-num={$info.like_num} class="like_num <if condition="$info['is_like'] eq 1 "> likeYes </if> ">({$info.like_num})</span>
+						<span data-id="{$info.is_collect}" collect-num={$info.collect_num} class="collect_num <if condition="$info['is_collect'] eq 1 "> collectYes </if> ">({$info.collect_num})</span>
+					</p>
+				</div>
+			</if>
+			</div>
+			<div class="recommend">
+				<div class="line_1">相关推荐</div>
+				<ul>
+					<volist name="recommend" id="recItem">
+					<li>
+						<php>$cover_arr = explode(',', $recItem['cover_media_ids']);</php>
+						<p class="recommend_img"><a href="{:U('Detail/index', array('id'=>$recItem['article_id']))}" title="{$recItem['title']}" title=""><img src="{$cover_arr[0]|get_cover}" alt=""></a></p>
+						<p class="recommend_tit"><a href="{:U('Detail/index', array('id'=>$recItem['article_id']))}" title="{$recItem['title']}" title="">{$recItem.title}</a></p>
+						<p class="per_aline">
+							<span class="article_type">{$recItem.category_id|articleTypeName=###|}</span>
+							<span class="img"><img src="{:get_user_info($recItem['user_id'], 'avatar')}" alt="" id="userTagImg"></span>
+							<span class="userTag"><a href="{:U('Other/index', array('uid'=>$recItem['user_id']))}">
+								{:get_user_info($recItem['user_id'], 'nickname')}
+							</a>
+							</span>
+							<span class="userTagTime">{$recItem['post_time']|time_tran=###,"Y-m-d"}</span>
+						</p>
+					</li>
+					</volist>
+				</ul>
+			</div>
+			<div class="clear"></div>
+			<if  condition="$preview neq 1">
+			<div class="comment">
+				<div class="line_1">热门评论</div>
+				<div class="commentCon radius">
+					<div class="write">
+						<form>
+						<textarea name="commentTextarea" placeholder="你可以在这里发表你的看法~" onKeyDown="gbcount(this.form.commentTextarea,this.form.count_w);" onKeyUp="gbcount(this.form.commentTextarea,this.form.count_w);"></textarea>
+						<div class="sendLine">
+							<p class="sendComment" id="sendTextarea">发 表</p>
+							<p class="listenTag">共&nbsp;{$comment|count}&nbsp;条评论</p>
+							<p class="listenTag listenW">还可以输入<input disabled class="count_w" type="text" name="count_w" value="80">字</p>
+						</div>
+						</form>
+						<div class="clear"></div>
+						<div class="message">
+							<ul>
+								<volist name="comment" id="item">
+								<li>
+									<div class="msg_headImg">
+										<a target="_blank" href="{:U('Other/index', array('uid'=>$item['user_id']))}">
+											<eq name="item['user_id']" value="0">
+												<img src="/Public/pc/images/default.jpg" alt="">
+											<else/>
+												<img src="{:get_user_info($item['user_id'], 'avatar')}" alt="">
+											</eq>
+										</a>
+									</div>
+									<div class="msg">
+										<div class="msg_user">
+											<a target="_blank" href="{:U('Other/index', array('uid'=>$item['user_id']))}">
+												<eq name="item['user_id']" value="0">
+													<p>{$item['visitor']}</p>
+												<else/>
+													<p>{:get_user_info($item['user_id'], 'nickname')}</p>
+												</eq>
+												</a>
+											<php>$time=time_tran($item['post_time'])</php>
+											<if condition="$item['post_time'] eq $time">
+												<p>{$item['post_time']|datetime_format=###,"Y-m-d"}</p>
+												<else/>
+												<p>{$time}</p>
+											</if>
+
+											<p class="msg_text">{$item['content']}</p>
+										</div>
+										<div class="msg_btn">
+											<p class="click_replay_btn"><img src="__PUBLIC__/pc/images/msg.png" alt=""><span>{$item['_child']|count}</span></p>	
+											<p class="write_replay"><input type="text" value=""><button class="send_replay">回复</button><input type="hidden" value="{$item['comment_id']}"></p>
+										</div>
+										<notempty name="item['_child']">
+											<div class="reply">
+												<volist name="item['_child']" id="itemReplay">
+													<div class="reply_list">
+														<div class="msg_headImg">
+															<a href="#">
+																<eq name="itemReplay['user_id']" value="0">
+																	<img src="/Public/pc/images/default.jpg" alt="">
+																<else/>
+																	<img src="{:get_user_info($itemReplay['user_id'], 'avatar')}" alt="">
+																</eq>
+															</a>
+														</div>
+														<div class="reply_msg">
+															<div class="msg_user">
+																<eq name="item['user_id']" value="0">
+																	<p>{$itemReplay['visitor']}</p>
+																<else/>
+																	<p>{:get_user_info($itemReplay['user_id'], 'nickname')}</p>
+																</eq>
+
+																<p>{$itemReplay['post_time']|time_tran=###}</p>
+																<p class="msg_text">{$itemReplay['content']}</p>
+															</div>
+														</div>												
+													</div>
+												</volist>												
+												<div class="showMore">
+													<hr>
+													<p>查看更多</p>
+												</div>
+											</div>
+										</notempty>
+									</div>
+								</li>
+								</volist>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			</if>
+
+
+		</div>
+		<div class="right">
+			<div class="personal radius">
+				<p class="headImg"><a href="{:U('Other/index', array('uid'=>$info['user_id']))}"><img src="{:get_user_info($info['user_id'], 'avatar')}" alt=""></a></p>
+				<p class="userName">{:get_user_info($info['user_id'], 'nickname')}</p>
+				<php>$signature=get_user_info($info['user_id'], 'signature')</php>
+				<p class="intro"><if condition="$signature">{$signature}<else/>这个人懒，暂无个性签名</if></p>
+				<p class="perBtn">
+					<if condition="$info['isSubscribe'] eq 1 ">
+						<a href="javascript:void(0);" class="is-attention">已关注</a>
+						<else/>
+						<a href="javascript:void(0);" class="attention">关注</a>
+					</if>
+
+					<a href="javascript:void(0);" class="reward">打赏</a>
+				</p>
+			</div>
+			<div class="newmsg radius">
+				<div class="frameHead"><i></i><span>热门消息</span></div><br>
+				<div class="Con_ newmsgCon">
+					<ul>
+						<volist name="hotArticle" id="vo">
+							<a href="{:U('Detail/index', array('id'=>$vo['article_id']))}"><li><p>{$vo.title}</p><p>{$vo['post_time']|time_tran=###,"m月d日"}</p></li></a>
+						</volist>
+
+
+					</ul>
+				</div>
+			</div>
+			<div class="newinformation radius">
+				<div class="frameHead"><i></i><span>最新资讯</span></div><br>
+				<div class="Con_ mationCon">
+					<ul>
+						<volist name="newInformation" id="newItem">
+						<a href="{:U('Detail/index', array('id'=>$newItem['article_id']))}" title="{$newItem['title']}">
+							<li>
+								<php>$cover_arr = explode(',', $newItem['cover_media_ids']);</php>
+								<p><img src="{$cover_arr[0]|get_cover}" alt=""></p>
+								<p class="detail-title">{$newItem['title']}</p>
+								<p>{$newItem['post_time']|time_tran=###,"Y-m-d"}</p>
+							</li>						
+						</a>
+						</volist>
+					</ul>
+				</div>
+			</div>
+		</div>		
+	</div>
+	<if  condition ="$preview neq 1">
+	<div class="foot">
+		<div class="foot_con">
+			<div class="foot_text">
+				<div class="foot_line">
+					<p class="foot_input"><input type="text" name="commentInput" placeholder="你可以在这里发表你的看法~"></p>				
+					<p class="sendComment sendFoot" id="sendInput">发 表</p>					
+				</div>
+			</div>
+		</div>
+	</div>
+	</if>
+	<div class="scrollTop">
+		<a href="javascript:void(0)" class="btn_top" id="rMenuCont" title="返回顶部"></a>
+	</div>
+	<div class="bg_"></div><div class="tips"><span></span></div>
+
+	<div class="wx-fx">
+		<p>分享到微信朋友圈<span class="wx-close">×</span></p>
+
+		<img src="http://qr.topscan.com/api.php?bg=ffffff&fg=000&gc=000&el=l&w=200&m=10&text=http://chinanursecare.cn/Wap/CmsArticle/info/id/{$_GET['id']}">
+		<p>打开微信，点击底部的“发现”</p>
+		<p>使用“扫一扫”即可分享至朋友圈</p>
+
+	</div>
+
+</block>
+
+	<block name="script">
+		<if  condition ="$preview neq 1">
+		<script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+		<script type="text/javascript">
+			function getWxCode(){
+				var thisUrl = encodeURIComponent("__SELF__");
+				var obj = new WxLogin({
+					id: "login_container",
+					appid: "wx3e330ada3765df67",
+					scope: "snsapi_login",
+					redirect_uri: encodeURIComponent("http://chinanursecare.cn/Home/Public/getWxInfo/?thisUrl="+thisUrl),
+					state: Math.ceil(Math.random()*1000),
+					style: "black",
+					href: ""
+				});
+			}
+		</script>
+		<script type="text/javascript" src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+		<script type="text/javascript">
+			$(".reward").click(function () {
+				$.ajax({
+					type: 'post',
+					dataType: 'json',
+					data:{},
+					url: '__MODULE__/Detail/login',
+					success: function (data) {
+						if(data==200){
+							$(".give-reward").show();
+						}else{
+							login_w();
+						}
+					},
+				});
+
+			});
+			$(function(){
+//			取消图片的title
+				$(".article_content img").each(function () {
+//				alert($(this).attr("title"));
+					$(this).attr("title","");
+				})
+
+				$('.registBtn').click(function(){
+					window.location.href='__MODULE__/Public/register'
+				});
+		        document.onkeydown = function(e){
+		            if(!e) e = window.event;
+		            if((e.keyCode || e.which) == 13){
+		                if(!$('.login_u').is(':hidden')){
+		                    login();
+		                }                       
+		            }
+		        }
+				$('.wxBtn a').click(function(){
+					$('.login_u').hide();
+					$('.login_s').fadeIn();
+					$('.cut_u').children('span').removeClass('active');
+					$('.cut_s').children('span').addClass('active');
+				});
+				$('.cut_s').click(function(){
+					$(this).next().children('span').removeClass('active');
+					$(this).children('span').addClass('active');
+					$('.login_u').hide();
+					$('.login_s').show();
+				});
+				$('.cut_u').click(function(){
+					$(this).prev().children('span').removeClass('active');
+					$(this).children('span').addClass('active');
+					$('.login_s').hide();
+					$('.login_u').show();
+				});
+				$('input[name=username]').focus(function(){
+					$(this).parent().css('border','1px solid #11BFAF');
+					$(this).prev().css('background-position','0px 0px');
+				});
+				$('input[name=password]').focus(function(){
+					$(this).parent().css('border','1px solid #11BFAF');
+					$(this).prev().css('background-position','-24px 0px');
+				});
+				$('input[name=username]').blur(function(){
+					$(this).parent().css('border','1px solid #E5E5E5');
+					$(this).prev().css('background-position','0px 24px');
+				});
+				$('input[name=password]').blur(function(){
+					$(this).parent().css('border','1px solid #E5E5E5');
+					$(this).prev().css('background-position','-24px -24px');
+				});
+				$('input[name=submit]').click(function(){
+					login();
+				});
+				function login(){
+					var mobile = $('input[name=username]').val();
+					var psw = $('input[name=password]').val();
+					var re_url = '{$re_url}';
+					if(isNull(mobile)||mobile.length != 11){
+						tips('请输入正确手机号码',2);
+						return false;
+					}
+					if(isNull(psw)){
+						tips('请输入密码',2);
+						return false;
+					}
+					$.ajax({
+						type: 'post',
+						dataType: 'json',
+						data:{'mobile':mobile,'psw':psw,'re_url':re_url,},
+						url: '__MODULE__/Public/login',
+						success: function (data) {
+							if(data.status == 1){
+								tips(data.info);
+								setTimeout('window.location.reload()',1000);
+							}else{
+								tips(data.info,2);
+							}
+						},
+						error: function(XMLHttpRequest, textStatus, errorThrown) {
+							tips('请勿重复提交！',2);
+						}
+					});
+				}
+			});
+
+		</script>
+		<script type="text/javascript">
+			$(".wx-custom").click(function () {
+				$(".wx-fx").show();
+			})
+			//返回顶部
+			var docHeight=$(document).height();
+			$(function() {
+				$('.open_close').click(function(){
+					$('.bg_,.login').fadeOut();
+				});
+				$(".btn_top").hide();
+				$(".btn_top").click(function(){
+					$('html, body').animate({scrollTop: 0},300);return false;
+				});
+				$('.gotoWrite').click(function(){
+					$(window).scrollTop($('.message').offset().top-275);
+				});
+				$('.showMore').click(function(){
+					if($(this).prevAll().length>2){
+						$(this).prevAll().fadeIn();
+						$(this).hide();
+					}else{
+						tips('^_^ 无更多回复');
+					}
+
+				});
+				$(window).bind('scroll resize',function(){
+					if($(window).scrollTop()<=500){
+						$(".btn_top").hide();
+					}else{
+						$(".btn_top").show();
+					}
+
+					//下面这句主要是获取网页的总高度，主要是考虑兼容性所以把Ie支持的documentElement也写了，这个方法至少支持IE8
+					var htmlHeight=document.body.scrollHeight||document.documentElement.scrollHeight;
+					//clientHeight是网页在浏览器中的可视高度，
+					var clientHeight=document.body.clientHeight||document.documentElement.clientHeight;
+					//scrollTop是浏览器滚动条的top位置，
+					var scrollTop=document.body.scrollTop||document.documentElement.scrollTop;
+					//通过判断滚动条的top位置与可视网页之和与整个网页的高度是否相等来决定是否加载内容；
+
+					if(scrollTop+clientHeight > htmlHeight-500){
+						$(".foot").hide();
+
+					}else{
+						$(".foot").show();
+					}
+
+
+
+
+				});
+				var he=window.pageYOffset; ;
+
+				$('.message').on('click','.click_replay_btn',function(){
+					$(this).next().toggle();
+					$(this).next().children(':first').focus();
+				});
+				$('#sendTextarea').on('click',function(){
+					var commentText = $("textarea[name='commentTextarea']").val();
+					if(isNull(commentText)){
+						tips('请输入评论内容！');
+						return false;
+					}
+					comment(commentText);
+				});
+				$('#sendInput').on('click',function(){
+					var commentText = $("input[name='commentInput']").val();
+					if(isNull(commentText)){
+						tips('请输入评论内容！');
+						return false;
+					}
+					comment(commentText);
+				});
+				$('.message').on('click','.send_replay',function(){
+					var commentText = $(this).prev().val();
+					var comId = $(this).next().val();
+					if(isNull(commentText)){
+						tips('请输入评论内容！');
+						return false;
+					}
+					var obj = $(this).parent().parent();
+					$(this).parent().fadeOut();
+					comment(commentText,comId,obj);
+				});
+			});
+
+			function comment(text,comId,obj){
+				var artId = "{:I('get.id')}";
+
+				if(!isNull(obj)){
+					if(isNull(obj.next().text())){
+						var stat = 2;
+					}else{
+						var stat = 3;
+					}
+				}else{
+					var stat = '';
+				}
+				$.ajax({
+					type: 'post',
+					dataType: 'json',
+					data:{'artId':artId,'comId':comId,'text':text,'stat':stat},
+					url: '__CONTROLLER__/comment',
+					success: function (data) {
+						var list = data.msg;
+						if(data.status == 0){
+							tips(list);
+						}
+						if(data.status == 1){
+							$(window).scrollTop($('.message').offset().top-275);
+							$(list).hide().prependTo($('.message ul')).fadeIn('slow');
+						}
+						if(data.status == 2){
+							obj.after(list);
+							$(window).scrollTop($('.message').offset().top-275);
+							var count_r = obj.children(':first').children(':last');
+							count_r.text(parseInt(count_r.text())+1);
+						}
+						if(data.status == 3){
+							$(list).hide().prependTo(obj.next()).fadeIn('slow');
+							var count_r = obj.children(':first').children(':last');
+							count_r.text(parseInt(count_r.text())+1);
+						}
+					}
+				});
+			}
+
+			function isNull(data){
+				return (data == "" || data == undefined || data == null || data == 0) ? true : false;
+			}
+			function tips(data,sts){
+				$('.tips span').css('background-color','#11BFAF');
+				if(sts==2){
+					$('.tips span').css('background-color','red');
+				}
+				$('.tips span').text(data);
+				$('.tips,.bg_').fadeIn().delay(1000).fadeOut();
+			}
+			function login_w(){
+				$('.bg_,.login').fadeIn();
+				getWxCode();
+			}
+			function gbcount(message,remain){
+				var max;
+				max = 80;
+				if (message.value.length > max) {
+					message.value = message.value.substring(0,max);
+					remain.value = 0;
+					$('.listenW,.listenW input').css('color','red');
+				}
+				else {
+					remain.value = max - message.value.length;
+				}
+			}
+			function share(shareId) {
+				setTimeout("ajaxShare("+shareId+")",5000)
+			}
+			function ajaxShare(shareId) {
+				var artId={$getID};
+				$.ajax({
+					type: 'post',
+					dataType: 'json',
+					data:{'shareId':shareId,'artId':artId},
+					url: '__CONTROLLER__/share',
+					success: function (data) {
+
+					}
+				});
+			}
+
+
+			$(".attention").click(function (){
+				var artId = "{:I('get.id')}";
+				$.ajax({
+					type: 'post',
+					dataType: 'json',
+					data:{'artId':artId},
+					url: '__CONTROLLER__/attention',
+					success: function (data) {
+						if(data.status==200){
+							$(".attention").addClass("is-attention");
+							$(".attention").html('已关注');
+							$('.attention').unbind();
+						}else if(data.status==600){
+							login_w();
+							return false;
+						}else{
+							tips(data.msg);
+							return false;
+						}
+					}
+				})
+			})
+
+			$("#like_num").click(function (){
+				var artId = "{:I('get.id')}";
+				var user_id="{$userId}";
+				var like_num=parseInt($(this).attr("like-num"));
+				var like_num_add=like_num+1;
+				var like_num_min=like_num-1;
+				var is_like=$(this).attr("data-id");
+				$.ajax({
+					type: 'post',
+					dataType: 'json',
+					data:{'artId':artId,'is_like':is_like},
+					url: '__CONTROLLER__/like',
+					success: function (data) {
+
+						if(user_id){
+							if(data.status==200){
+								if(is_like==0){
+									$(".like_num").addClass("likeYes");
+									$(".like_num").html("("+like_num_add+")");
+									$(".like_num").attr("data-id",1);
+									$(".like_num").attr("like-num",like_num_add);
+								}else{
+									$(".like_num").removeClass("likeYes");
+									$(".like_num").html("("+like_num_min+")");
+									$(".like_num").attr("data-id",0);
+									$(".like_num").attr("like-num",like_num_min);
+								}
+							}else{
+								tips(data.msg);
+								return false;
+							}
+						}else{
+							$(".like_num").addClass("likeYes");
+							$(".like_num").html("("+like_num_add+")");
+							$(".like_num").attr("id","");
+
+						}
+					}
+				})
+			})
+
+			$(".collect_num").click(function (){
+				var artId = "{:I('get.id')}";
+				var collect_num=parseInt($(this).attr("collect-num"));
+				var collect_num_add=collect_num+1;
+				var collect_num_min=collect_num-1;
+				var is_collect=$(this).attr("data-id");
+				$.ajax({
+					type: 'post',
+					dataType: 'json',
+					data:{'artId':artId,'is_collect':is_collect},
+					url: '__CONTROLLER__/collect',
+					success: function (data) {
+
+						if(data.status==200){
+							if(is_collect==0){
+								$(".collect_num").addClass("collectYes");
+								$(".collect_num").html("("+collect_num_add+")");
+								$(".collect_num").attr("data-id",1);
+								$(".collect_num").attr("collect-num",collect_num_add);
+							}else{
+								$(".collect_num").removeClass("collectYes");
+								$(".collect_num").html("("+collect_num_min+")");
+								$(".collect_num").attr("data-id",0);
+								$(".collect_num").attr("collect-num",collect_num_min);
+							}
+						}else if(data.status==600){
+
+							login_w();
+							return false;
+						}else{
+							tips(data.msg);
+							return false;
+						}
+
+
+					}
+				})
+			})
+			$(".wx-close").click(function () {
+				$(".wx-fx").hide();
+			})
+		</script>
+		<script>
+			window._bd_share_config= {"common":{"bdSnsKey":{}, "bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"}, "share":{},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+		</script>
+		</if>
+	</block>
+
+

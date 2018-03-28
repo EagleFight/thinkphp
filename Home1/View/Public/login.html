@@ -1,0 +1,159 @@
+<extend name="Public:base" />
+<block name="style">
+    <title>{$info.title}</title>
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/login.css?v={:time()}" />
+</block>
+<block name="boby">
+    <div class="login">
+        <div class="title">用户登录</div>
+        <div class="content">
+           <table border="0" cellpadding="0" cellspacing="0" width="100%">
+               <tr>
+                   <td class="cut_s">扫码登录<span class="active"></span></td>
+                   <td class="cut_u">账号登录<span></span></td>
+               </tr>
+           </table>        
+            <div class="login_u">
+               <div class="form">
+                   <form action="" method="post" accept-charset="utf-8">
+                       <p class="input_w">
+                            <span class="userImg"></span>
+                            <input type="text" name="username" placeholder="手机号">
+                        </p>
+                       <p class="input_w">
+                            <span class="pswImg"></span>
+                            <input type="password" name="password" placeholder="密码">
+                        </p>
+                       <p class="forget"><a href="{:U('Public/retrieve')}">忘记密码？</a></p>
+                       <p class="btn_ loginBtn"><input type="button" name="submit" value="登录" class="input_base"></p>
+                       <p class="btn_ registBtn"><a href="__CONTROLLER__/register"><input type="button" name="regist" value="注册" class="input_base"></a></p>
+                   </form>
+                   <p class="ta">第三方登录</p>
+                   <p class="wxBtn"><a href="javascript:;"></a></p>               
+               </div>                
+            </div>
+            <div class="login_s">
+                <p id="login_container" style="margin-top: -30px"></p>
+                <!-- <p><span>打开微信，扫描二维码登录</span></p> -->
+            </div>
+        </div>
+        <div class="bg_"></div><div class="tips"><span></span></div>
+    </div>
+</block>
+<block name="script">
+<script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+<script type="text/javascript">
+    $(function(){
+      var thisUrl = encodeURIComponent("<present name='refer'>{$refer}<else />__MODULE__/User/index</present>");
+      var obj = new WxLogin({ 
+          id: "login_container", 
+          appid: "wx3e330ada3765df67", 
+          scope: "snsapi_login", 
+          redirect_uri: encodeURIComponent("http://chinanursecare.cn/Home/Public/getWxInfo/?thisUrl="+thisUrl), 
+          state: Math.ceil(Math.random()*1000), 
+          style: "black", 
+          href: ""
+      });
+    });
+</script>
+    <script type="text/javascript">
+        $(function(){
+            var oper = "{:I('get.oper')}";
+            if(oper == 'account'){
+              $('.login_u').fadeIn();
+              $('.login_s').hide();
+              $('.cut_u').children('span').addClass('active');
+              $('.cut_s').children('span').removeClass('active');               
+            }
+            $('.registBtn').click(function(){
+                window.location.href='__CONTROLLER__/register'
+            });
+            document.onkeydown = function(e){
+                if(!e) e = window.event;
+                if((e.keyCode || e.which) == 13){
+                    login();
+                }
+            }
+            $('.wxBtn a').click(function(){
+              $('.login_u').hide();
+              $('.login_s').fadeIn();
+              $('.cut_u').children('span').removeClass('active');
+              $('.cut_s').children('span').addClass('active');              
+            });
+            $('.cut_s').click(function(){
+                $(this).next().children('span').removeClass('active');
+                $(this).children('span').addClass('active');
+                $('.login_u').hide();
+                $('.login_s').show();
+            });
+            $('.cut_u').click(function(){
+                $(this).prev().children('span').removeClass('active');
+                $(this).children('span').addClass('active');
+                $('.login_s').hide();
+                $('.login_u').show();
+            });
+            $('input[name=username]').focus(function(){
+                $(this).parent().css('border','1px solid #11BFAF');
+                $(this).prev().css('background-position','0px 0px');
+            });
+            $('input[name=password]').focus(function(){
+                $(this).parent().css('border','1px solid #11BFAF');
+                $(this).prev().css('background-position','-24px 0px');
+            });
+            $('input[name=username]').blur(function(){
+                $(this).parent().css('border','1px solid #E5E5E5');
+                $(this).prev().css('background-position','0px 24px');
+            });                         
+            $('input[name=password]').blur(function(){
+                $(this).parent().css('border','1px solid #E5E5E5');
+                $(this).prev().css('background-position','-24px -24px');
+            });
+            $('input[name=submit]').click(function(){
+               login();
+            }); 
+        });
+        function login(){
+            var mobile = $('input[name=username]').val();
+            var psw = $('input[name=password]').val();
+            if(isNull(mobile)||mobile.length != 11){
+                tips('请输入正确手机号码',2);
+                return false;
+            }                
+            if(isNull(psw)){
+                tips('请输入密码',2);
+                return false;
+            }
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data:{'mobile':mobile,'psw':psw},
+                url: '__SELF__',
+                success: function (data) {                    
+                    if(data.status == 1){
+                        tips(data.info);
+                        setTimeout("skip()",1500);
+                    }else{
+                      tips(data.info,2);  
+                    }
+                }, 
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    tips('请勿重复提交！',2);
+                }
+            });              
+        }
+        function skip(){
+            window.location.href="<present name='refer'>{$refer}<else />__MODULE__/User/index</present>";
+        }
+        function isNull(data){ 
+            return (data == "" || data == undefined || data == null || data == 0) ? true : false; 
+        }
+        function tips(data,sts){
+            $('.tips span').css('background-color','#11BFAF');
+            if(sts==2){
+                $('.tips span').css('background-color','red');
+            }
+            $('.tips span').text(data);
+            $('.tips,.bg_').fadeIn().delay(1000).fadeOut();
+        }        
+    </script>
+</block>

@@ -1,0 +1,14 @@
+<aside class="box_shadow right_side">
+		<div class="recommend">
+			<h2>推荐回答</h2>
+			<ul>
+				<volist name='recomm_ask' id='vo'>
+				<li>
+					<h3><span>{$vo.reward}</span><a href="{:U('dtl?id='.$vo[id])}">{$vo.title}</a></h3>
+					<p class="thumb"><a href="{:U('dtl?id='.$vo[id])}"><volist name="vo.media" id="media"><img src="{$media}"></volist></a></p>
+					<p class="info"><span>{$vo.reply_count}</span><time>{$vo.create_time|strtotime|date='Y-m-d',###}</time></p>
+				</li>
+				</volist>
+			</ul>
+		</div>
+	</aside>

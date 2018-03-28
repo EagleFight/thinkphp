@@ -1,0 +1,341 @@
+<extend name="User:public" />
+<block name="title">
+	<title>我的个人中心</title>
+</block>
+<block name="style">
+	<link rel="stylesheet" href="__PUBLIC__/pc/css/userpage.css?v={:time()}" />
+</block>
+<block name="member">
+
+
+		<div class="individual">
+			<div class="m_head_1">
+				个人中心
+			</div>
+			<div class="basic radius">
+				<table border="0" cellpadding="0" cellspacing="0" width="100%">
+					<tr>
+						<td width="15%"><img src="{$userInfo.avatar}" alt=""></td>
+						<td width="22%" style="border-right: 1px solid  #E5E5E5">
+				            <p class="name _conName">{$userInfo.nickname}
+				            <span class="attestation_1">
+				            <switch name="userInfo.is_auth">
+							    <case value="0"><a href="{:U('User/manager', array('oper'=>'auth'))}" title="前往认证">去认证</a></case>
+							    <case value="1">认证中</case>
+							    <case value="2">已认证</case>
+							    <default />
+							</switch>
+				            </span>
+				            </p>
+							<p class="user_addr" >
+								<if condition="$myinfo['jobinfo']['hospital']">{$myinfo['jobinfo']['hospital']}&nbsp;&nbsp;{$myinfo['jobinfo']['department']}/{$myinfo['jobinfo']['title']}<else/>暂未填写职位</if>
+							</p>
+							<p class="user_tag">
+								<if condition="$userInfo['signature']">{$userInfo.signature}<else/>暂无个性签名</if>
+
+							</p>
+
+						</td>
+						<td class="bas_ul">
+							<ul>
+								<li>
+									<a href="{:U('User/subpeople')}"><p>{$myinfo.subscribe}</p></a>
+									<p>我的订阅</p>
+								</li>
+
+							<li><a href="{:U('answer')}">
+								<p>{$myinfo.answer}</p>
+							</a>
+								<p>我的回答</p></li>
+							<li><a href="{:U('mycollect')}">
+								<p>{$myinfo.collect}</p>
+							</a>
+								<p>我的收藏</p>	</li>
+							<li>
+								<a href="{:U('Article/myarticle')}">
+								<p>{$myinfo.contribution}</p>
+							</a>
+								<p>我的投稿</p>
+							</li>
+							</ul>
+						</td>
+						<!--<td class="bas_c">-->
+							<!--<a href="{:U('answer')}">-->
+								<!--<p>{$myinfo.answer}</p>-->
+							<!--</a>-->
+							<!--<p>我的回答</p>-->
+						<!--</td>-->
+						<!--<td class="bas_c">-->
+							<!--<a href="{:U('mycollect')}">-->
+							<!--<p>{$myinfo.collect}</p>-->
+								<!--</a>-->
+							<!--<p>我的收藏</p>								-->
+						<!--</td>-->
+						<!--<td class="bas_c">-->
+							<!--<a href="{:U('Article/myarticle')}">-->
+							<!--<p>{$myinfo.contribution}</p>-->
+								<!--</a>-->
+							<!--<p>我的投稿</p>									-->
+						<!--</td>-->
+						<td class="bas_c bas_h" width="18%">
+							<a href="{:U('myhb')}">
+							<p>{$myinfo.hbcount}</p>
+								</a>
+							<p>拥有的H币</p>									
+						</td>
+					</tr>
+				</table>			
+			</div>
+			<div class="content">
+				<div class="con_left">
+
+					<!--<div class="m_head_1">-->
+						<!--我的基金-->
+					<!--</div>-->
+					<!--<div class="fund radius" style="text-align: center;line-height: 140px;font-size: 24px;color: #282828">-->
+						<!--功能开发中-->
+					<!--</div>						-->
+					<!--<div class="m_head">-->
+						<!--近期提问-->
+					<!--</div>-->
+					<!--<div class="pageBase radius">-->
+						<!--<ul>-->
+							<!--<li>-->
+								<!--<div>-->
+									<!--<p class="page_tit">护士如何提升技能升级打怪</p>-->
+									<!--<p class="page_intro">知识：基本理论知识培训。学习探索获得，通过考核结果呈现出来。</p>-->
+									<!--<p class="page_img">-->
+									   <!--<img src="__PUBLIC__/pc/images/banner_1.png" alt="">-->
+									   <!--<img src="__PUBLIC__/pc/images/banner_1.png" alt="">-->
+									   <!--<img src="__PUBLIC__/pc/images/banner_1.png" alt="">-->
+									<!--</p>-->
+									<!--<p class="page_tag">-->
+										<!--<img src="__PUBLIC__/pc/images/look.png" alt=""><span>123</span>-->
+										<!--<img src="__PUBLIC__/pc/images/msg.png" alt=""><span>2</span>-->
+									<!--</p>-->
+								<!--</div>-->
+							<!--</li>-->
+							<!--<div>-->
+								<!--<hr>-->
+								<!--<p class="read_more"><span>查看更多</span></p>									-->
+							<!--</div>-->
+						<!--</ul>	-->
+					<!--</div>						-->
+
+					<!--<div class="m_head_1">-->
+						<!--我的基金-->
+					<!--</div>-->
+					<!--<div class="fund radius" style="text-align: center;line-height: 140px;font-size: 24px;color: #282828">-->
+						<!--功能开发中-->
+					<!--</div>						-->
+
+<!-- 					<div class="m_head_1">
+						我的基金
+					</div>
+					<div class="fund radius" style="text-align: center;line-height: 140px;font-size: 24px;color: #282828">
+						功能开发中
+					</div>						
+>>>>>>> .r142
+					<div class="m_head">
+<<<<<<< .mine
+||||||| .r136
+						近期提问
+					</div>
+					<div class="pageBase radius">
+						<ul>
+							<li>
+								<div>
+									<p class="page_tit">护士如何提升技能升级打怪</p>
+									<p class="page_intro">知识：基本理论知识培训。学习探索获得，通过考核结果呈现出来。</p>
+									<p class="page_img">
+									   <img src="__PUBLIC__/pc/images/banner_1.png" alt="">
+									   <img src="__PUBLIC__/pc/images/banner_1.png" alt="">
+									   <img src="__PUBLIC__/pc/images/banner_1.png" alt="">
+									</p>
+									<p class="page_tag">
+										<img src="__PUBLIC__/pc/images/look.png" alt=""><span>123</span>
+										<img src="__PUBLIC__/pc/images/msg.png" alt=""><span>2</span>
+									</p>
+								</div>
+							</li>
+							<div>
+								<hr>
+								<p class="read_more"><span>查看更多</span></p>									
+							</div>
+						</ul>	
+					</div>						
+					<div class="m_head">
+
+						近期提问
+					</div>
+					<div class="pageBase radius">
+						<ul>
+							<li>
+								<div>
+									<p class="page_tit">护士如何提升技能升级打怪</p>
+									<p class="page_intro">知识：基本理论知识培训。学习探索获得，通过考核结果呈现出来。</p>
+									<p class="page_img">
+									   <img src="__PUBLIC__/pc/images/banner_1.png" alt="">
+									   <img src="__PUBLIC__/pc/images/banner_1.png" alt="">
+									   <img src="__PUBLIC__/pc/images/banner_1.png" alt="">
+									</p>
+									<p class="page_tag">
+										<img src="__PUBLIC__/pc/images/look.png" alt=""><span>123</span>
+										<img src="__PUBLIC__/pc/images/msg.png" alt=""><span>2</span>
+									</p>
+								</div>
+							</li>
+							<div>
+								<hr>
+								<p class="read_more"><span>查看更多</span></p>									
+							</div>
+						</ul>	
+					</div>	 -->					
+					<div class="m_head">
+
+						近期投稿
+					</div>
+					<div class="pageBase radius pageLast">
+						<ul>
+							<volist name="newContribution" id="vo" empty="$empty_article">
+								<li>
+									<p class="page_tit"><a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{$vo.title}</a></p>
+									<p class="page_intro">{:get_str($vo['digest'],0,20)}</p>
+									<p class="page_img">
+										<php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>
+										<volist name="cover_arr" id="img">
+											<a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+												<img src="{$img|get_cover}">
+												</a>
+										</volist>
+
+									</p>
+									<p class="page_tag">
+										<img src="__PUBLIC__/pc/images/look.png" alt=""><span>{$vo.view_num}</span>
+										<img src="__PUBLIC__/pc/images/msg.png" alt=""><span>{$vo.comment_num}</span>
+									</p>
+								</li>
+							</volist>
+							<div>
+								<hr>
+								<p class="read_more"><a href="{:U('Article/myarticle')}">查看更多</a></p>
+							</div>
+						</ul>
+					</div>
+				</div>
+				<div class="con_right">
+
+					<!--<div class="m_head_1">-->
+						<!--推荐问题-->
+					<!--</div>-->
+					<!--<div class="pageBase pageBase_t radius ">-->
+						<!--<ul>-->
+							<!--<li>-->
+								<!--<p class="t_tit">护士如何提升技能升级打怪</p>-->
+								<!--<p class="t_tag"><span>5月31日</span><span class="attestation_1 float_r">悬赏: 50H币</span></p>-->
+							<!--</li>						<li>-->
+								<!--<p class="t_tit">护士如何提升技能升级打怪</p>-->
+								<!--<p class="t_tag"><span>5月31日</span><span class="attestation_1 float_r">悬赏: 50H币</span></p>-->
+							<!--</li>						<li>-->
+								<!--<p class="t_tit">护士如何提升技能升级打怪</p>-->
+								<!--<p class="t_tag"><span>5月31日</span><span class="attestation_1 float_r">悬赏: 50H币</span></p>-->
+							<!--</li>-->
+						<!--</ul>-->
+					<!--</div>-->
+
+					<!--<div class="m_head_1">-->
+						<!--推荐问题-->
+					<!--</div>-->
+					<!--<div class="pageBase pageBase_t radius ">-->
+						<!--<ul>-->
+							<!--<li>-->
+								<!--<p class="t_tit">护士如何提升技能升级打怪</p>-->
+								<!--<p class="t_tag"><span>5月31日</span><span class="attestation_1 float_r">悬赏: 50H币</span></p>-->
+							<!--</li>						<li>-->
+								<!--<p class="t_tit">护士如何提升技能升级打怪</p>-->
+								<!--<p class="t_tag"><span>5月31日</span><span class="attestation_1 float_r">悬赏: 50H币</span></p>-->
+							<!--</li>						<li>-->
+								<!--<p class="t_tit">护士如何提升技能升级打怪</p>-->
+								<!--<p class="t_tag"><span>5月31日</span><span class="attestation_1 float_r">悬赏: 50H币</span></p>-->
+							<!--</li>-->
+						<!--</ul>-->
+					<!--</div>-->
+
+<!-- 					<div class="m_head_1">
+						推荐问题
+					</div>
+					<div class="pageBase pageBase_t radius ">
+						<ul>
+							<li>
+								<p class="t_tit">护士如何提升技能升级打怪</p>
+								<p class="t_tag"><span>5月31日</span><span class="attestation_1 float_r">悬赏: 50H币</span></p>
+							</li>						<li>
+								<p class="t_tit">护士如何提升技能升级打怪</p>
+								<p class="t_tag"><span>5月31日</span><span class="attestation_1 float_r">悬赏: 50H币</span></p>
+							</li>						<li>
+								<p class="t_tit">护士如何提升技能升级打怪</p>
+								<p class="t_tag"><span>5月31日</span><span class="attestation_1 float_r">悬赏: 50H币</span></p>
+							</li>
+						</ul>
+					</div> -->
+
+					<div class="m_head">
+						推荐阅读
+					</div>
+					<div class="pageBase pageBase_re radius">
+						<ul>
+							<volist name="recomment" id="vo">
+								<li>
+									<php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>
+									<div class="re_img">
+										<a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+											<img src="{$cover_arr[0]|get_cover}">
+											</a>
+									</div>
+
+									<div class="re_content">
+										<p class="tit"><a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{:get_str($vo['title'],0,25)}</a></p>
+										<p class="tags">{$vo['post_time']|time_tran=###,"Y-m-d"}</p>
+									</div>
+								</li>
+							</volist>
+						</ul>
+					</div>						
+					<!--<div class="m_head">-->
+						<!--活动推荐-->
+					<!--</div>-->
+					<!--<div class="pageBase radius">-->
+						<!--<div id="slideBox" class="slideBox">-->
+							<!--<div class="hd">-->
+								<!--<volist name="activity_list" id="vo">-->
+										<!--<ul>-->
+												<!--<li></li>-->
+										<!--</ul>-->
+								<!--</volist>-->
+
+							<!--</div>-->
+							<!--<div class="bd"><ul>-->
+								<!--<volist name="activity_list" id="vo">-->
+
+
+												<!--<li><a href="{:U($vo['url'])}" target="_blank">-->
+													<!--<img src="{:get_cover($vo['cover_media_id'])}">-->
+												<!--</a></li>-->
+
+
+								<!--</volist></ul>-->
+							<!--</div>-->
+						<!--</div>-->
+					<!--</div>-->
+				</div>
+			</div>
+		</div>
+
+</block>
+<block name="script">
+	<script type="text/javascript" src="__PUBLIC__/pc/js/jquery.SuperSlide.2.1.1.js"></script>
+	<script type="text/javascript">
+
+		jQuery(".slideBox").slide({mainCell:".bd ul",effect:"left",autoPlay:true});
+	</script>
+</block>

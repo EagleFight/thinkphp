@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"><block name="docMeta">
+<meta name="keywords" content="{$Think.config.siteconfig.site_keywords}">
+<meta name="description" content="{$Think.config.siteconfig.site_description}">
+</block><title><present name="indTitle">{$indTitle}<else /><present name="addTitle">{$addTitle}-</present>{$Think.config.siteconfig.site_title}</present></title>
+<load href="__PUBLIC__/pc/answer/stylesheets/common.css" />
+<load href="__PUBLIC__/pc/css/reset.css" /><block name="docFile">
+</block><!--[if lt IE 9]>
+<script type="text/javascript" src="http://apps.bdimg.com/libs/html5shiv/3.7/html5shiv.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+<include file="Public:header_densin" />
+<block name="docBody">
+none template block[docBody]
+</block>
+<include file="Public:footer_densin" />
+</body>
+</html>

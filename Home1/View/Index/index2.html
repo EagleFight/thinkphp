@@ -1,0 +1,73 @@
+
+    <!--置顶              -->
+    <div  class="hot-content">
+        <ul class="hot-ul">
+            <volist name="stick" id="vo">
+                <li class="one-hot-li">
+                    <php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>
+                    <a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+                        <img class="one-hot-img" src="{$cover_arr[0]|get_cover}" />
+                        </a>
+                    <div>
+                        <p class="hot-title"><a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{$vo.title}</a></p>
+                        <p class="hot-intro">{:get_str($vo['digest'],0,40)}</p>
+                        <span class="hot-message"><a href="javascript:void(0);">{:get_category_info($vo['category_id'],'title')}</a></span>
+                                        <span class="hot-name"><a  target="_blank" href="{:U('Other/index', array('uid'=>$vo['user_id']))}">
+                                            <img src="{:get_user_info($vo['user_id'], 'avatar')}" alt="avatar">{:get_user_info($vo['user_id'], 'nickname')}
+                                        </a></span>
+                        <span class="hot-time">{$vo['post_time']|time_tran=###,"Y-m-d"}</span>
+                    </div>
+                    <div class="hot-zhan">
+                        <span class="look"><img src="__PUBLIC__/pc/images/look.png">{$vo.view_num}</span>
+                        <span class="xin"><img src="__PUBLIC__/pc/images/xin.png">{$vo.like_num}</span>
+                    </div>
+
+                </li>
+            </volist>
+        </ul>
+    </div>
+    <!--置顶  end            -->
+
+    <!--图片-->
+    <div class="pic-recommend">
+        <volist name="pic2" id="vo" offset="0" length='1'>
+            <div class="pic-recommend-big">
+                <php>$cover_arr = explode(',', $vo['rec_img']);</php>
+                <a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+                    <img class="btn-pic-recommend "  src="{$cover_arr[0]|get_cover}" />
+                </a>
+
+                <p><a  target="_blank" href="{:U('Detail/index',array('id'=>$vo['article_id']))}">{$vo.title}</a>
+                    <span class="hot-time pic-recommend-big-time by-oneself">{$vo['post_time']|time_tran=###,"Y-m-d"}</span></p>
+            </div>
+        </volist>
+        <ul class="pic-recommend-ul">
+            <volist name="pic2" id="vo" >
+                <if condition="$i lt $num ">
+                    <li>
+                        <php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>
+
+                        <div class="auto-img">
+                            <a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+                                <img  src="{$cover_arr[0]|get_cover}" />
+                            </a>
+                        </div>
+                        <p class="hot-intro "><a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{$vo.title}</a></p>
+                        <span class="hot-message"><a href="javascript:void(0);">{:get_category_info($vo['category_id'],'title')}</a></span>
+                                            <span class="hot-name"><a target="_blank" href="{:U('Other/index', array('uid'=>$vo['user_id']))}">
+                                                <img src="{:get_user_info($vo['user_id'], 'avatar')}" alt="avatar">{:get_user_info($vo['user_id'], 'nickname')}
+                                            </a></span>
+                        <span class="hot-time">{$vo['post_time']|time_tran=###,"Y-m-d"}</span>
+                    </li>
+                </if>
+
+            </volist>
+        </ul>
+        <p class="clear"></p>
+    </div>
+    <!--图片end-->
+
+
+
+
+

@@ -1,0 +1,39 @@
+<div class="head-block-fixed">
+	<div class="head-block">
+		<div class="head">
+			<div class="head-left">
+				<a href="{:U('Index/index')}" ><i class="logo"></i></a>
+				<ul class="nav">
+					<li><a href="{:U('Index/index')}" >首页</a></li>
+					<li class="active"><a href="{:U('Answer/index')}">问答</a></li>
+					<li><a href="index.html">学习</a></li>
+					<li><a href="index.html">活动</a></li>
+					<li><a href="index.html">工具</a></li>
+					<li><a href="index.html">社区</a></li>
+				</ul>
+			</div>
+			<div>
+			<present name="user_info">
+				<div class="head-right">
+					<a href="{:U('User/index')}"><img class="portrait" src="{$user_info.avatar}"></a>
+					<ul class="question"><a href="{:U('User/index')}"><li>个人中心</li></a>
+						<a href="{:U('User/message')}"><li>我的信息</li></a>
+						<a href="{:U('User/subscribe')}"><li>我的订阅</li></a>
+						<a href="{:U('User/answer')}"><li>我的回答</li></a>
+						<a href="{:U('User/mycollect')}"><li>我的收藏</li></a>
+						<a href="{:U('User/myhb')}"><li>我的H币</li></a>
+						<a href="{:U('Article/myarticle')}"><li>我的发布</li></a>
+						<a href="{:U('User/addr')}"><li>我的地址</li></a>
+						<a href="{:U('User/manager')}"><li>账号管理</li></a>
+						<a href="{:U('Public/logout')}"><li>退出登录</li></a>
+					</ul>
+				</div>
+			<else />
+				<div class="size-login">
+					<a href="{:U('Public/login')}">登录</a>&nbsp;/<a href="{:U('Public/register')}">注册</a>
+				</div>
+			</present>
+			</div>
+		</div>
+	</div>
+</div>

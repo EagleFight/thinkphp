@@ -1,0 +1,49 @@
+<extend name="User:public" />
+<block name="title">
+	<title>我的问答</title>
+</block>
+<block name="style">
+	<link rel="stylesheet" href="__PUBLIC__/pc/css/answer.css?v={:time()}" />
+</block>
+<block name="member">
+	<div class="answer">
+		<div class="m_head">我的回答</div>
+		<div class="content">
+			<div class="answer_subnav">
+				<ul>
+					<li class="<eq name='Think.ACTION_NAME' value='ask'>cur</eq> <neq name='unread.ask' value='0'>msg</neq>"><a href="{:U('ask')}">我的提问<neq name='unread.ask' value='0'>({$unread.ask})</neq></a></li>
+					<li class="<eq name='Think.ACTION_NAME' value='answer'>cur</eq> <neq name='unread.answer' value='0'>msg</neq>"><a href="{:U('answer')}">我的回答<neq name='unread.answer' value='0'>({$unread.answer})</neq></a></li>
+				</ul>
+				<p>累积提问:{$anser_count.ask}，回答:{$anser_count.answer}，有用:{$anser_count.useful}，被采纳:{$anser_count.adopted}</p>
+			</div>
+			<div>
+				<ul class="ask_list myanswer_list">
+					<volist name="data" id="vo">
+					<li class="box_shadow">
+						<div class="question_info">
+							<a class="ctegory_tag" href="{:U('Answer/category?category_id='.$vo[category_id])}">{$vo.category_name}</a>
+							<h3><a href="{:U('Answer/dtl?id='.$vo[answer_id])}">{$vo.title}</a></h3>
+							<p class="thumb"></p>
+							<div><time>{$vo.answer_create_time|strtotime|date='Y-m-d'}</time><a class="user" href="{:U('Other/answer?uid='.$vo['user_id'])}"><img src="{$vo.avatar}">{$vo.nickname}</a></div>
+						</div>
+						<div class="answer_info">
+							<p class="avatar"><a href="#"><img src="{$user_info.avatar}"></a></p>
+							<div class="answer_content">
+								<a href="#" class="nickname">{$user_info.nickname}</a><time>{$vo.create_time|strtotime|date='Y-m-d'}</time>
+								<div class="answer_detail">{$vo.content}</div>
+								<p class="thumb"><volist name="vo.media" id="m"><img src="{$m}"></volist></p>
+								<a href="{:U('Answer/comments?id='.$vo[id])}" class="comments">共{$vo.comment_count}条回复&gt; <neq name="vo.unread_comment_count" value="0"><span style="color:red">有{$vo.unread_comment_count}条新回复</span></neq></a>
+							</div>
+						</div>
+					</li>
+					</volist>
+				</ul>
+			</div>
+			<ul class="page">
+				{$page}
+			</ul>
+		</div>	    	
+	</div>
+</block>
+<block name="script">
+</block>

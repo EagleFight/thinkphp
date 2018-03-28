@@ -1,0 +1,37 @@
+<extend name="User:public" />
+<block name="title">
+	<title>我的信息</title>
+</block>
+<block name="style">
+	<link rel="stylesheet" href="__PUBLIC__/pc/css/mystyle.css?v={:time()}" />
+</block>
+<block name="member">
+
+		<div class="message">
+			<div class="m_head">
+				我的信息
+			</div>
+			<div class="m_content radius">
+				<ul>
+					<volist name="info" id="vo" empty="$empty">
+					<li>
+						<div>
+							<p class="msg_tit"><a href="#">{$vo.title}</a></p>
+							<p class="msg_tag">
+								<img src="__PUBLIC__/pc/images/bell.png" alt="">
+								<span>{$vo.type}</span>
+								<span class="msg_time">{$vo.postTime|datetime_format2=###}</span>
+							</p>
+						</div>
+						<hr>
+					</li>
+					</volist>
+				</ul>
+			</div>
+		</div>
+
+</block>
+
+<block name="script">
+	
+</block>

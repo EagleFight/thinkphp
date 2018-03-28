@@ -1,0 +1,45 @@
+<extend name="other:left" />
+<block name="title">
+    <title>Ta的回答</title>
+</block>
+<block name="style">
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/article.css" />
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/answer.css" />
+    <!--<link rel="stylesheet" href="__PUBLIC__/pc/css/index.css" />-->
+</block>
+
+<block name="member">
+	<div class="answer">
+		<div class="m_head">Ta的回答</div>
+		<div class="content">
+			<div>
+				<empty name="data">
+					<p class="list-not">暂无回答!</p>
+				</empty>
+				<ul class="ask_list myanswer_list">
+					<volist name="data" id="vo">
+					<li class="box_shadow">
+						<div class="question_info">
+							<a class="ctegory_tag" href="{:U('Answer/category?category_id='.$vo[category_id])}">{$vo.category_name}</a>
+							<h3><a href="{:U('Answer/dtl?id='.$vo[answer_id])}">{$vo.title}</a></h3>
+							<p class="thumb"></p>
+							<div><time>{$vo.answer_create_time|strtotime|date='Y-m-d'}</time><a class="user" href="{:U('Other/answer?uid='.$vo['user_id'])}"><img src="{$vo.avatar}">{$vo.nickname}</a></div>
+						</div>
+						<div class="answer_info">
+							<p class="avatar"><a href="#"><img src="{$user.avatar}"></a></p>
+							<div class="answer_content">
+								<a href="#" class="nickname">{$user.nickname}</a><time>{$vo.create_time|strtotime|date='Y-m-d'}</time>
+								<div class="answer_detail">{$vo.content}</div>
+								<p class="thumb"><volist name="vo.media" id="m"><img src="{$m}"></volist></p>
+							</div>
+						</div>
+					</li>
+					</volist>
+				</ul>
+			</div>
+			<ul class="page">
+				{$page}
+			</ul>
+		</div>	    	
+	</div>
+</block>

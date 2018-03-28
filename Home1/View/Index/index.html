@@ -1,0 +1,458 @@
+<extend name="Public:base" />
+    <block name="style">
+        <meta name="baidu-site-verification" content="mB7Pbda2hm" />
+        <meta name="baidu-site-verification" content="wjrCW4gcCo" />
+        <title>{:get_config('WEB_SITE_TITLE')}</title>
+        <link rel="stylesheet" href="__PUBLIC__/pc/css/index.css" />
+        <link rel="stylesheet" href="__PUBLIC__/pc/css/ban.css" />
+    </block>
+
+
+
+
+
+<block name="boby">
+
+    <div class="big-content">
+        <div class="nav-left-fixed">
+        <div class="nav-left" >
+            <ul>
+                <volist name="nav_list" id="vo">
+                    <if condition="$i eq 1">
+                        <a href="javascript:void(0);" class="lookIndex" >
+                        <li data_id="0" class="look_more default "   >{$vo.title}</li>
+                            </a>
+                        <else/>
+                        <a href="javascript:void(0);"   onclick="look_more(this,{$vo.category_id},1)"  >
+                        <li data_id="{$vo.category_id}" class="look_more "  >{$vo.title}</li>
+                            </a>
+                    </if>
+
+                    <!--<a href="javascript:void(0);"  <if condition="$i eq 1"> class="lookIndex" <else/> onclick="look_more(this,{$vo.category_id},1)" </if> >-->
+                        <!--<li data_id="{$vo.category_id}" class="look_more <if condition="$i eq 1"> default </if> "   >{$vo.title}</li>-->
+
+                </volist>
+
+            </ul>
+        </div>
+    </div>
+        <div class="nav-centre">
+            <!--<div id="slideBox" class="slideBox">-->
+                <!--<div class="hd">-->
+                    <!--<volist name="banner" id="vo">-->
+                            <!--<ul>-->
+                                <!--<li></li>-->
+                            <!--</ul>-->
+                    <!--</volist>-->
+                <!--</div>-->
+                <!--<div class="bd">-->
+                    <!--<volist name="banner" id="vo">-->
+                    <!--<ul>-->
+                            <!--<li><a href="{:U($vo['url'])}" target="_blank"><img  src="{$vo['img']|get_cover}" /></a></li>-->
+                    <!--</ul>-->
+                    <!--</volist>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <div class='o-sliderContainer' id="pbSliderWrap0" style="margin-top:0;">
+                <div class='o-slider' id='pbSlider0'>
+
+                    <volist name="banner" id="vo">
+                    <div class="o-slider--item" data-image="{$vo['img']|get_cover}">
+                        <a href="{$vo['url']}" target="_blank">
+                        <div class="o-slider-textWrap">
+                            <!--<h1 class="o-slider-title">This is a title</h1>-->
+                            <!--<span class="a-divider"></span>-->
+                            <!--<h2 class="o-slider-subTitle">This is a sub title</h2>-->
+                            <!--<span class="a-divider"></span>-->
+                            <!--<p class="o-slider-paragraph">This is a sub paragraph This is a sub paragraph This is a sub paragraph This is a sub paragraph This is a sub paragraph This is a sub paragraph This is a sub paragraph </p>-->
+                        </div>
+                        </a>
+                    </div>
+                    </volist>
+                </div>
+
+            </div>
+
+
+
+            <!--文章列表-->
+            <div class="clean_hot_content" style="clear: both;">
+<!--置顶              -->
+                <div  class="hot-content">
+                    <ul class="hot-ul">
+                        <volist name="stick" id="vo">
+                            <li class="one-hot-li">
+                                    <php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>
+                                <a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+                                    <img class="one-hot-img" src="{$cover_arr[0]|get_cover}" />
+                                    </a>
+                                <div>
+                                    <p class="hot-title"><a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{$vo.title}</a></p>
+                                    <p class="hot-intro">{:get_str($vo['digest'],0,40)}</p>
+                                    <span class="hot-message"><a href="javascript:void(0);">{:get_category_info($vo['category_id'],'title')}</a></span>
+                                        <span class="hot-name"><a  target="_blank" href="{:U('Other/index', array('uid'=>$vo['user_id']))}">
+                                            <img src="{:get_user_info($vo['user_id'], 'avatar')}" alt="avatar">{:get_user_info($vo['user_id'], 'nickname')}
+                                        </a></span>
+                                    <span class="hot-time">{$vo['post_time']|time_tran=###,"Y-m-d"}</span>
+                                </div>
+                                <div class="hot-zhan">
+                                    <span class="look"><img src="__PUBLIC__/pc/images/look.png">{$vo.view_num}</span>
+                                    <span class="xin"><img src="__PUBLIC__/pc/images/xin.png">{$vo.like_num}</span>
+                                </div>
+
+                            </li>
+                        </volist>
+                    </ul>
+                </div>
+                <!--置顶  end            -->
+
+<!--图片-->
+                <div class="pic-recommend">
+                    <volist name="pic2" id="vo" offset="0" length='1'>
+                    <div class="pic-recommend-big">
+                        <php>$cover_arr = explode(',', $vo['rec_img']);</php>
+                        <a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+                            <img class="btn-pic-recommend "  src="{$cover_arr[0]|get_cover}" />
+                        </a>
+
+                        <p><a  target="_blank" href="{:U('Detail/index',array('id'=>$vo['article_id']))}">{$vo.title}</a>
+                            <span class="hot-time pic-recommend-big-time by-oneself">{$vo['post_time']|time_tran=###,"Y-m-d"}</span></p>
+                    </div>
+                        </volist>
+                    <ul class="pic-recommend-ul">
+                        <volist name="pic2" id="vo" offset="1" length='5'>
+                            <if condition="$i lt $num ">
+                                <li>
+                                    <php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>
+                                        <div class="auto-img">
+                                            <a  target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">
+                                                <img  src="{$cover_arr[0]|get_cover}" />
+                                            </a>
+                                        </div>
+                                    <p class="hot-intro "><a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{$vo.title}</a></p>
+                                    <span class="hot-message"><a href="javascript:void(0);">{:get_category_info($vo['category_id'],'title')}</a></span>
+                                            <span class="hot-name"><a target="_blank" href="{:U('Other/index', array('uid'=>$vo['user_id']))}">
+                                                <img src="{:get_user_info($vo['user_id'], 'avatar')}" alt="avatar">{:get_user_info($vo['user_id'], 'nickname')}
+                                            </a></span>
+                                    <span class="hot-time">{$vo['post_time']|time_tran=###,"Y-m-d"}</span>
+                                </li>
+                            </if>
+
+                        </volist>
+                    </ul>
+                    <p class="clear"></p>
+                </div>
+                <!--图片end-->
+
+
+
+
+
+        </div>
+
+
+
+            <div class="bottom">
+                <p class="bottom-left"></p>
+                <a href="javascript:void(0);" class="click_more" onclick="ajax_article()">
+                    <span class="bottom-text">点击加载更多(^_^)</span></a>
+                <p class="bottom-right"> </p>
+            </div>
+        </div>
+
+
+
+
+<div class="right-content">
+        <div class="nav-right">
+            <div class="right-logo">
+                <img  src="__PUBLIC__/pc/images/logo2.png">
+                <p>一个关爱、服务护士的平台</p>
+            </div>
+            <div class="weixin">
+
+                <div class="code">
+                    <p class="wx-code wx-code2">
+                        <volist name="banner_list" id="vo">
+                            <if condition="$vo['name'] eq 'WEB_WX_MA' ">
+                        <img  src="{$vo['value']|get_cover}" />
+                    </if>
+                </volist>
+                    </p>
+                </div>
+<div class="btn-wx">
+                <div  class="ioc-nav ioc-wx-nav" ></div>
+                <p>微信公众号</p>
+</div>
+            </div>
+            <div class="app">
+
+                        <div class="code">
+                            <p class="wx-code app-code">
+                                <volist name="banner_list" id="vo">
+                                    <if condition="$vo['name'] eq 'WEB_APP' ">
+                                <img  src="{$vo['value']|get_cover}" />
+                                    </if>
+                                </volist>
+                            </p>
+                        </div>
+
+
+<div class="btn-app">
+                <div class="ioc-nav ioc-app-nav " ></div>
+                <p>手机APP</p>
+</div>
+            </div>
+        </div>
+<p class="clear"></p>
+    <if condition="$hot_article">
+    <div class="hot-article">
+        <p class="hot-title"><i></i>热门推荐</p>
+        <ul class="hot-article-ul">
+            <volist name="hot_article" id="vo">
+
+            <li>
+                <a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{$vo.title}</a>
+                <p>{$vo['post_time']|time_tran=###,"m月d日"}</p>
+            </li>
+
+            </volist>
+        </ul>
+    </div>
+</if>
+    <!--<if condition="$activity_list">-->
+    <!--<div class="hot-article">-->
+        <!--<p class="hot-title"><i></i>最新活动</p>-->
+        <!--<ul class="new-active">-->
+            <!--<volist name="activity_list" id="vo">-->
+            <!--<li>-->
+                <!--<img src="{:get_cover($vo['cover_media_id'])}">-->
+                <!--<div class="new-active-title">-->
+                    <!--<p>{$vo.title}</p>-->
+                    <!--<p>{:datetime_format($vo['start_time'], 'Y-m-d')}</p>-->
+                <!--</div>-->
+                <!--<a target="_blank" href="{:U($vo['url'])}">立即查看</a>-->
+            <!--</li>-->
+
+            <!--</volist>-->
+        <!--</ul>-->
+
+    <!--</div>-->
+<!--</if>-->
+
+    <!--<if condition="$sty_article">-->
+    <!--<div class="hot-article">-->
+        <!--<p class="hot-title"><i></i>培训学习</p>-->
+        <!--<ul class="train-study">-->
+            <!--<volist name="sty_article" id="vo">-->
+            <!--<li>-->
+                <!--<php>$cover_arr = explode(',', $vo['cover_media_ids']);</php>-->
+                <!--<img  src="{$cover_arr[0]|get_cover}" />-->
+                <!--<p><a target="_blank" href="{:U('Detail/index', array('id'=>$vo['article_id']))}">{$vo.title}</a></p>-->
+            <!--</li>-->
+            <!--</volist>-->
+
+            <!--<a href="" class="study-more"></a>-->
+        <!--</ul>-->
+    <!--</div>-->
+    <!--</if>-->
+
+</div>
+    </div>
+    <a href="javascript:void(0)" class="btn_top" id="rMenuCont" title="返回顶部"></a>
+    <p class="clear"></p>
+
+</block>
+
+<block name="script">
+
+    <script type="text/javascript" src="__PUBLIC__/pc/js/jquery.SuperSlide.2.1.1.js"></script>
+    <script src='__PUBLIC__/pc/js/hammer.min.js'></script>
+    <script src='__PUBLIC__/pc/js/slider.js'></script>
+
+    <script type="text/javascript">
+
+    $('#pbSlider0').pbTouchSlider({
+        slider_Wrap: '#pbSliderWrap0',
+        slider_Threshold: 10,
+        slider_Speed:600,
+        slider_Ease:'ease-out',
+        slider_Drag : true,
+        slider_Arrows: {
+            enabled : true
+        },
+        slider_Dots: {
+            class :'.o-slider-pagination',
+            enabled : true
+        },
+        slider_Breakpoints: {
+            default: {
+                height: 310
+            },
+            tablet: {
+                height: 350,
+                media: 1024
+            },
+            smartphone: {
+                height: 250,
+                media: 768
+            }
+        }
+    });
+
+
+    //返回顶部
+    $(function() {
+        $(".btn_top").hide();
+
+        $(".btn_top").click(function(){
+            $('html, body').animate({scrollTop: 0},300);return false;
+        })
+        $(window).bind('scroll resize',function(){
+            if($(window).scrollTop()<=500){
+                $(".btn_top").hide();
+
+            }else{
+                $(".btn_top").show();
+
+            }
+        })
+    })
+
+
+
+jQuery(".slideBox").slide({mainCell:".bd ul",effect:"left",autoPlay:true});
+    $(".btn-wx").hover(function(){
+        $(".code .wx-code2").css("display","block");
+    },function(){
+        $(".code .wx-code2").css("display","none");
+    });
+    $(".btn-app").hover(function(){
+        $(".code .app-code").css("display","block");
+    },function(){
+        $(".code .app-code").css("display","none");
+    });
+
+
+var getmore=1;
+var page=1;
+var id=0;
+/*
+ * 监听滚动条，加载更多
+ */
+function look_more(obj,id,p){
+    $.ajax({
+        type: "post",
+        dataType: "json",
+        data:{"id":id,"page":p},
+        url: "{:U(ajax_article)}",
+        success: function (msg) {
+            if(msg.status==200){
+                $(".look_more").removeClass("active");
+                $(obj).find("li").addClass("active");
+                $(".clean_hot_content").html(msg.data);
+                $('#rMenuCont').click();
+                page=2;
+
+
+            }
+            if(msg.status==400){
+                $(".look_more").removeClass("active");
+                $(obj).find("li").addClass("active");
+                $(".clean_hot_content").empty();
+                $('#rMenuCont').click();
+                $(".bottom-text").html("已经到底了(>﹏<)");
+                getmore=0;
+            }
+            $(".look_more").removeClass("default");
+
+        }
+    });
+}
+$(".lookIndex").click(function (){
+    $.ajax({
+        type: "post",
+        dataType: "json",
+        url: "{:U(ajax_article_index)}",
+        success: function (msg) {
+            if(msg.status==200){
+                $(".look_more").removeClass("active");
+                $(".lookIndex li").addClass("active");
+                $(".clean_hot_content").html(msg.data);
+                $('#rMenuCont').click();
+                page=1;
+                $(".bottom-text").html("点击加载更多(^_^)");
+                getmore=1;
+
+
+            }
+
+
+
+        }
+    });
+});
+
+
+//var str='<div class="bottom"><p class="bottom-left"></p><span class="bottom-text">下拉加载更多(^_^)</span><p class="bottom-right"> </p></div>';
+$(window).scroll(function(){
+
+
+    //下面这句主要是获取网页的总高度，主要是考虑兼容性所以把Ie支持的documentElement也写了，这个方法至少支持IE8
+    var htmlHeight=document.body.scrollHeight||document.documentElement.scrollHeight;
+    //clientHeight是网页在浏览器中的可视高度，
+    var clientHeight=document.body.clientHeight||document.documentElement.clientHeight;
+    //scrollTop是浏览器滚动条的top位置，
+    var scrollTop=document.body.scrollTop||document.documentElement.scrollTop;
+    //通过判断滚动条的top位置与可视网页之和与整个网页的高度是否相等来决定是否加载内容；
+
+    if(scrollTop+clientHeight == htmlHeight && getmore==1){
+        getmore=0;
+        if(page<3){
+            ajax_article();
+        }else{
+            $(".bottom-text").html("点击加载更多(^_^)");
+        }
+
+    }
+})
+function ajax_article() {
+
+    var ids= $(".nav-left .active").attr("data_id");
+    if(!ids){ids=0;}
+    $.ajax({
+        type: "post",
+        dataType: "json",
+        data:{"id":ids,"page":page},
+        url: "{:U(ajax_article)}",
+        success: function (msg) {
+            if(msg.status==200){
+                $(".clean_hot_content").append(msg.data);
+                $(".bottom-text").html("点击加载更多(^_^)");
+                page=page+1;
+                getmore=1;
+            }
+            if(msg.status==400){
+                $(".bottom-text").html("已经到底了(>﹏<)");
+//                $(".click_more").attr('disabled','disabled');
+                getmore=0;
+            }
+
+        }
+    });
+}
+
+</script>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?2b74525b0b474f14635b2933ffdf5b54";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+    
+    </block>
+

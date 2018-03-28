@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <title>积分兑换</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/home/prize/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/home/prize/css/convert.css?v={:time()}">
+</head>
+<body>
+    <div class="header">
+        <img src="__PUBLIC__/home/prize/img/banner_1.png" alt="" width="100%">
+    </div>
+    <div class="c_cont">
+        <p class="ex_hb">你的H币余额</p>
+        <p class="hb">{$allHb}</p>
+        <p class="expl_">H币不够用？来看看其他活动吧~<a href="{:U('Activity/index')}" title="">查看</a></p>
+    </div>
+    <div class="change">
+        <div class="ch_tit">抽奖次数兑换</div>
+        <div class="ch_input">
+           <p class="c_input">
+                <input type="text" id="convert" name="changenums" value="" placeholder="请输入你要兑换的抽奖次数" onKeyUp="value=value.replace(/[^\d]/g,'')">
+                <button id="numsBtn">兑 换</button>
+           </p>
+        </div>
+        <div class="scale">兑换比例：500H币=1次</div>
+        <div class="scale nowsc">你目前还有<sapn class="nums">{$prize_num}</sapn>次抽奖机会（还可以兑换<span class="nums">{$deg_num}</span>次抽奖）</div>
+    </div>
+<!--     <div class="hr"><hr></div>
+    <div class="change">
+        <div class="ch_tit">红包兑换</div>
+        <div class="ch_input">
+           <p class="c_input">
+                <input type="text" id="convert" name="changermb" value="" placeholder="请输入你要兑换的H币数量" onKeyUp="value=value.replace(/[^\d]/g,'')">
+                <button id="renBtn">兑 换</button>
+           </p>
+        </div>
+        <div class="scale">兑换比例：100H币=1元</div>
+        <div class="scale nowsc">你目前共可兑换<sapn class="nums">{$deg_red}</sapn>元红包</div>
+    </div> -->
+    <div class="foot"></div>    
+    <div class="tips"><span></span></div>
+</body>
+</html>
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript">
+
+    function isNull(data){ 
+        return (data == "" || data == undefined || data == null || data == 0) ? true : false; 
+    }
+    function tips(data){
+        $('.tips').show();
+        $('.tips span').text(data);
+        setTimeout('$(".tips").hide()',1500);       
+    }
+    $(function(){
+        var hbCount = "{$useHb}";
+        var degNum = "{$deg_num}";
+        $('#numsBtn').click(function(){
+            var inputCount = $("input[name='changenums']").val();
+            if(isNull(inputCount)){
+                tips('请输入兑换次数！');
+                return false;
+            }
+            if(parseInt(inputCount)>parseInt(degNum)){
+                tips("你的H币不足");
+                return false;                
+            }
+            $.ajax({
+                url:'__SELF__',
+                type:'post',
+                data:{nums:inputCount,status:1},
+                success:function(data){
+                    if(data.status==0){
+                        tips(data.msg);
+                        return false;
+                    }
+                    if(data.status==1){
+                        tips(data.msg);
+                        setTimeout("window.location.href='__CONTROLLER__'",1500);                       
+                        return false;
+                    }                                       
+                }
+            });            
+        }); 
+        // $('#renBtn').click(function(){
+        //     var inputCou = $("input[name='changermb']").val();
+        //     if(isNull(inputCou)){
+        //         tips('请输入H币数量！');
+        //         return false;
+        //     }
+        //     if(parseInt(inputCou)>parseInt(hbCount)){
+        //         tips('最多可兑换'+hbCount+'H币');
+        //         tips("你的H币不足");
+        //         return false;                
+        //     }
+        //     $.ajax({
+        //         url:'__SELF__',
+        //         type:'post',
+        //         data:{nums:inputCou,status:2},
+        //         success:function(data){
+        //             if(data.status==0){
+        //                 tips(data.msg);
+        //                 return false;
+        //             }
+        //             if(data.status==2){
+        //                 tips(data.msg);
+        //                 setTimeout("window.location.href='__CONTROLLER__/Qrcode'",1500);
+        //                 return false;
+        //             }  
+        //         }
+        //     });                        
+        // });         
+    })
+        
+</script>

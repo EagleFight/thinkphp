@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="format-detection" content="email=no"/>
+    <title>抽奖</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/home/prize/css/reset.css?v={:time()}">
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/home/prize/css/lottery.css?v={:time()}">
+</head>
+<body>
+    <div class="header">
+        <img src="__PUBLIC__/home/prize/img/banner.png" alt="" width="100%">
+    </div>
+    <div class="record" id="record">
+        <table border="0" cellpadding="0" cellspacing="0" id="newly" onclick="showLog()">
+            <volist name="newly" id="vos">
+                <tr>
+                    <td>{$vos.nickname|get_str=0,8}</td>
+                    <td>{$vos.gettime|time_tran=###}</td>
+                    <td><span class="jiang">{$vos.prized}</span></td>
+                </tr>                
+            </volist>          
+        </table>
+    </div>
+    <div class="container">
+        <div class="content">
+            <img src="__PUBLIC__/home/prize/img/tab.png" alt="" width="100px" class="tabBg_">
+            <div class="conLoading">
+                加载中...
+            </div>
+            <div class="conOption" id="lottery">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" class="conOptionTab">
+                    <tr width="100%">
+                        <td class="lottery-unit lottery-unit-0">
+                            <p class="prize prize_1_1"><img src="__PUBLIC__/home/prize/img/IPHONE.png" alt=""></p>
+                            <p class="prizex"><img src="__PUBLIC__/home/prize/img/prize1.png" alt="" width="100%"></p>
+                        </td>
+                        <td class="lottery-unit lottery-unit-1">
+                            <p class="prize prize_1_2"><img src="__PUBLIC__/home/prize/img/cash3.png" alt=""></p>
+                            <p class="prizex"><img src="__PUBLIC__/home/prize/img/prize4.png" alt=""></p>
+                        </td>
+                        <td class="lottery-unit lottery-unit-2">
+                            <p class="prize prize_1_3"><img src="__PUBLIC__/home/prize/img/IPAD.png" alt=""></p>
+                            <p class="prizex"><img src="__PUBLIC__/home/prize/img/prize2.png" alt=""></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="lottery-unit lottery-unit-7">
+                            <p class="prize prize_2_1"><img src="__PUBLIC__/home/prize/img/cash2.png" alt=""></p>
+
+                            <p class="prizex"><img src="__PUBLIC__/home/prize/img/prize5.png" alt=""></p>
+                        </td>
+                        <td class="lottery-click">
+                            <p class="prize prize_2_2"><a href="javascript:;"><img src="__PUBLIC__/home/prize/img/click.png" alt=""></a></p>
+                        </td>
+                        <td class="lottery-unit lottery-unit-3">
+                            <p class="prize prize_2_3"><img src="__PUBLIC__/home/prize/img/cashauto.png" alt=""></p>
+                            <p class="prizex"><img src="__PUBLIC__/home/prize/img/part.png" alt=""></p>
+                        </td>                       
+                    </tr>
+                    <tr>
+                        <td class="lottery-unit lottery-unit-6">
+                            <p class="prize prize_3_1"><img src="__PUBLIC__/home/prize/img/toiletry.png" alt=""></p>
+                            <p class="prizex"><img src="__PUBLIC__/home/prize/img/prize3.png" alt=""></p>
+                        </td>
+                        <td class="lottery-unit lottery-unit-5">
+                            <p class="prize prize_3_2"><img src="__PUBLIC__/home/prize/img/cash1.png" alt=""></p>
+                            <p class="prizex"><img src="__PUBLIC__/home/prize/img/prize6.png" alt=""></p>
+                        </td>
+                        <td class="lottery-unit lottery-unit-4">
+                            <p class="prize prize_3_3"><img src="__PUBLIC__/home/prize/img/cash4.png" alt=""></p>
+                            <p class="prizex"><img src="__PUBLIC__/home/prize/img/prize7.png" alt=""></p>                          
+                        </td>                       
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="confoot">
+            <if condition="$mobile eq -1">
+                    <p class="conhb">你还未登录哦，请先登录</p>
+                    <p class="conex"></p>
+                    <p><a href="/Wap/Public/register"><img src="__PUBLIC__/home/prize/img/gotologin.png" alt=""></a></p>
+                    <p class="conoth">登录认证成功后即送抽奖机会和H币哟~</p>            
+            <else />
+                <eq name="isAuth" value="2">
+                    <p class="conhb"><!-- 您有{$allHb}H币， -->你还有<span class="num_prize">{$prize_num}</span>次抽奖机会</p>
+                    <p class="conex"></p>
+                    <p><a href="__CONTROLLER__/convert"><img src="__PUBLIC__/home/prize/img/changebtn.png" alt=""></a></p>
+                    <p class="conoth">亲~您也可以直接把H币兑换成次数哦~</p>
+                <else/>
+                    <p class="conhb">你还未认证哦，请先认证</p>
+                    <p class="conex"></p>
+                    <p><a href="/Wap/User/authInfo"><img src="__PUBLIC__/home/prize/img/gotoregist.png" alt=""></a></p>
+                    <p class="conoth">认证成功后即送抽奖机会和H币哟~</p>
+                </eq>            
+            </if>
+        </div>
+    </div>
+    <div class="bg"></div>
+    <div class="cover">
+        <div class="coverBg">
+            <p class="getPri"></p>
+            <p class="closeC"><img src="__PUBLIC__/home/prize/img/showimg/close.png" alt=""></p>          
+            <p class="getStu"></p>
+            <p class="getCon"></p>
+            <p class="getExp"></p>
+            <p class="goBtn"></p>
+        </div>
+    </div>
+    <div class="tips"><span></span></div>
+    <div class="warn">
+        <div class="warn_con">
+            <p>请选择收货地址,否则无法收到实物奖品！</p>
+            <p class="warn_btn"><a href="javascript:;" onclick="referBtn()">确 定</a></p>
+        </div>
+    </div>
+    <div class="expl">
+        <img src="__PUBLIC__/home/prize/img/explain.png" alt="" width="100%">
+    </div>
+    <div class="prizeExplain">
+        <div class="ex_close">
+            <img src="__PUBLIC__/home/prize/img/close_1.png" alt="">
+        </div>
+        <div class="ex_content">
+            <div class="exp_head">
+                <div class="activity"><span class="un">活动说明</span></div>
+                <div class="myprize"><span class="noun">我的奖品</span></div>
+            </div>
+            <div class="active_ex">
+                {$activity.content|htmlspecialchars_decode}                               
+            </div>
+            <div class="my_list">
+                <table border="0" cellpadding="0" cellspacing="0" id="myPrizeList">
+                    <volist name="mylog" id="vo" empty="$empty">
+                        <tr>
+                            <td class="tL_">{$vo.gettime}</td>
+                            <td class="tR_">{$vo.prized}</td>
+                        </tr>                        
+                    </volist>
+                </table>
+            </div>             
+        </div>      
+    </div>
+    <div class="getLog">
+        <div class="log_close" onclick="hideLog()">
+            <img src="__PUBLIC__/home/prize/img/close_1.png" alt="">
+        </div>        
+        <div class="log_con">
+        <div class="log_tit"><span>中奖信息</span></div>
+        <div class="log_list" id="logListAuto">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <volist name="newly" id="vol">
+                    <tr>
+                        <td>{$vol.nickname|get_str=0,8}</td>
+                        <td>{$vol.gettime|time_tran=###}</td>
+                        <td><span class="jiang">{$vol.prized}</span></td>
+                    </tr>                
+                </volist>          
+            </table>
+        </div>                
+        </div>  
+    </div>    
+</body>
+</html>
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript" src="//res.wx.qq.com/open/js/jweixin-1.1.0.js"></script>
+<script type="text/javascript">
+	wx.config(<php> echo $js->config(array('openAddress','onMenuShareTimeline', 'onMenuShareAppMessage', 'hideMenuItems'), false); </php>);
+		wx.ready(function(){
+			wx.hideMenuItems({
+				menuList: [
+					'menuItem:share:qq',
+					'menuItem:share:weiboApp',
+					'menuItem:favorite',
+					'menuItem:share:facebook',
+					'menuItem:share:QZone',
+				]
+			});
+			var title  = "{$user_info['nickname']},邀请你注册并认证护士家园,赢iPhone8大奖!";
+			var link   = "{:U('Home/Public/inviter', array('inviter'=>$user_info['user_id']), true, true)}";
+			var imgUrl = 'http://'+'{$Think.server.http_host}'+"/Public/home/prize/img/banner.png";
+			var desc   = "一等奖iPhone8，二等奖iPad，三等奖名牌化妆品";
+			wx.onMenuShareTimeline({
+				title: title,  // 分享标题
+				link: link,   // 分享链接
+				imgUrl: imgUrl, // 分享图标
+				success: function () { 
+					// 用户确认分享后执行的回调函数
+				},
+				cancel: function () { 
+					// 用户取消分享后执行的回调函数
+				}    
+			});
+			wx.onMenuShareAppMessage({
+				title: title,    // 分享标题
+				desc: desc,      // 分享描述
+				link: link,      // 分享链接
+				imgUrl: imgUrl,   // 分享图标
+				type: 'link', // 分享类型,music、video或link，不填默认为link
+				dataUrl: '',  // 如果type是music或video，则要提供数据链接，默认为空
+				success: function () { 
+					// 用户确认分享后执行的回调函数
+				},
+				cancel: function () { 
+					// 用户取消分享后执行的回调函数
+				}
+			});
+		});
+		wx.error(function(res){
+			console.log(res);
+			alert(res);
+		});
+</script>
+<script type="text/javascript">
+    $(function(){
+        window.onload = function(){
+            var H = $('.tabBg_').height();
+            var W = $('.tabBg_').width();
+            var tH = {b: 0.827*H,c: 0.1548*H,d: 0.0645*H,e: 0.1983*W,f: 0.153*W,gH: 0.28387*H,gW: 0.2153*W,h: 0.2833*W,jH:0.3129*H,jW:0.252124*W,ah:0.1*H};
+            $(".conOptionTab").height(tH.b);        
+            $(".prize").height(tH.c);       
+            $(".prize").width(tH.e);        
+            $(".prizex").height(tH.d);      
+            $(".prizex").width(tH.f);
+            $(".lottery-click").width(tH.h);
+            $(".conOption").css("top",tH.ah+"px");
+            $(".lottery-unit").css({"background-size":tH.gH+"px "+tH.gW+"px","width":tH.h});       
+            $(".lottery-click").css("background-size",tH.jH+"px "+tH.jW+"px");
+            $(".conLoading").hide();
+            $(".conOption").show(); 
+        };
+    });
+</script>
+<script type="text/javascript">
+    var lottery = {
+        index: 0, //当前转动到哪个位置，起点位置
+        count: 0, //总共有多少个位置
+        timer: 0, //setTimeout的ID，用clearTimeout清除
+        speed: 20, //初始转动速度
+        times: 0, //转动次数
+        cycle: 50, //转动基本次数：即至少需要转动多少次再进入抽奖环节
+        prize: 0, //中奖位置
+        init: function(id) {
+            if ($("#" + id).find(".lottery-unit").length > 0) {
+                $lottery = $("#" + id);
+                $units = $lottery.find(".lottery-unit");
+                this.obj = $lottery;
+                this.count = $units.length;
+                $lottery.find(".lottery-unit-" + this.index).addClass("active");
+            }
+        },
+        roll: function() {
+            var index = this.index;
+            var count = this.count;
+            var lottery = this.obj;
+            $(lottery).find(".lottery-unit-" + index).removeClass("active");
+            index += 1;
+            if (index > count - 1) {
+                index = 0;
+            }
+            $(lottery).find(".lottery-unit-" + index).addClass("active");
+            this.index = index;
+            return false;
+        },
+        stop: function(index) {
+            this.prize = index;
+            return false;
+        }
+    };
+    function AutoScroll(obj) {
+        $(obj).find("#newly:first").animate({
+        marginTop: "-32px"
+        }, 600, function() {
+        $(this).css({ marginTop: "0px" }).find("tr:first").appendTo(this);
+        });
+    }
+    function AutoUp(obj) {
+        $(obj).animate({
+            'top': '-24px'
+        }, 2500, 'linear', function () {
+            $(this).css({'top': '0px'}).find("tr:first").appendTo(this);
+            AutoUp(obj);
+        });
+    }
+    function roll() {
+        lottery.times += 1;
+        lottery.roll();
+        var prize_site = $("#lottery").attr("prize_site");
+        if (lottery.times > lottery.cycle + 10 && lottery.index == prize_site) {
+            var prize_id = $("#lottery").attr("prize_id");
+            var prize_name = $("#lottery").attr("prize_name");
+
+            var prize_path = $("#lottery").attr("prize_path");
+            var prize_cover = $("#lottery").attr("prize_cover");
+            var prize_con = $("#lottery").attr("prize_con");
+            var prize_exp = $("#lottery").attr("prize_exp");
+            var prize_gobtn = $("#lottery").attr("prize_gobtn");
+            var prize_link = $("#lottery").attr("prize_link");
+            $(".getPri").html("<img src='"+prize_path+"' alt='' class='primg'>");
+            $(".getStu").html("<img src='"+prize_cover+"' alt=''>");
+            $(".getCon").html(prize_con);
+            $(".getExp").text(prize_exp);
+            $(".goBtn").html("<a href='"+prize_link+"' class='again' onclick='again()'>"+prize_gobtn+"</a>"); 
+            $("#myPrizeList").prepend("<tr><td class='tL_'>0分钟前</td><td class='tR_'>"+prize_con+"</td></tr> ");
+
+            setTimeout(function(){
+                showC();
+                switch(prize_id){
+                    case "1":
+                    case "3":
+                        $(".getPri img").css("width","30%");
+                        break;
+                    case "7":
+                        $(".getPri img").css("width","64%");
+                      break;
+                }
+                setLineH();             
+            },500);
+           
+            clearTimeout(lottery.timer);
+            lottery.prize = -1;
+            lottery.times = 0;
+            click = false;
+
+        } else {
+            if (lottery.times < lottery.cycle) {
+                lottery.speed -= 10;
+            } else if (lottery.times == lottery.cycle) {
+                var index = Math.random() * (lottery.count) | 0;
+                lottery.prize = index;
+            } else {
+                if (lottery.times > lottery.cycle + 10 && ((lottery.prize == 0 && lottery.index == 7) || lottery.prize == lottery.index + 1)) {
+                    lottery.speed += 110;
+                } else {
+                    lottery.speed += 20;
+                }
+            }
+            if (lottery.speed < 40) {
+                lottery.speed = 40;
+            }
+            lottery.timer = setTimeout(roll, lottery.speed);
+        }
+        return false;
+    }
+    function showC(){
+        $(".cover,.bg").show();     
+    }
+
+    function setLineH(){
+        var zH = $(".goBtn").height();
+        $(".goBtn").css("line-height",zH+"px");
+    }
+    function getPrize() {
+            // 没注册
+            var isAuth = "{$isAuth}";
+            if(isAuth != 2){
+                noauth();                 
+                return false;
+            }        
+            var nums = $('.num_prize').text();
+            if (nums == 0) {
+                nonums();                                
+                return false;                
+            } 
+            if (click) {
+                return false;
+            } else {
+                lottery.speed = 100;
+                click = true;
+                $('.num_prize').text(nums-1);
+                roll();
+                $.post("__CONTROLLER__/prize", {uid: 1}, function(data) {
+                    if(data == -2){                      
+                        noauth();
+                        clearTimeout(lottery.timer);                        
+                        click = false;                                                      
+                        return false;
+                    }                    
+                    if(data.status == 0){
+                        clearTimeout(lottery.timer);
+                        click = false;
+                        tips(data.msg);
+                        return false;
+                    }
+                    if(data == -1){
+                        nonums();
+                        clearTimeout(lottery.timer);
+                        click = false;                                                      
+                        return false;                         
+                    }
+                    $("#lottery").attr("prize_site", data.prize_site);
+                    $("#lottery").attr("prize_id", data.prize_id);
+                    $("#lottery").attr("prize_name", data.prize_name);
+                    $("#lottery").attr("prize_path", data.prize_path);
+                    $("#lottery").attr("prize_cover", data.prize_cover);
+                    $("#lottery").attr("prize_con", data.prize_con);
+                    $("#lottery").attr("prize_exp", data.prize_exp);
+                    $("#lottery").attr("prize_gobtn", data.prize_gobtn);
+                    $("#lottery").attr("prize_link", data.prize_link);
+                    
+                    // click = true;
+                    return false;
+                }, "json")
+            }
+    }
+    function nonums() {
+        $(".getStu").html("<img src='/public/home/prize/img/showimg/sorry.png' alt=''>");
+        $(".getCon").text("你的抽奖次数不够啦~");
+        $(".getExp").text("你还可以用积分兑换抽奖次数哟~");
+        $(".goBtn").html("<a href='/Wap/Prize/convert'>前往兑换</a>");
+        showC();
+        setLineH();
+    }
+    function noauth() {
+        $(".getStu").html("<img src='/public/home/prize/img/showimg/regist.png' alt=''>");
+        $(".getCon").text("你还没有认证哟~");
+        $(".getExp").text("注册抽奖~IPHONE8等你拿");
+        $(".goBtn").html("<a href='/Wap/User/authInfo'>前往认证</a>");
+        showC();
+        setLineH();
+    }
+    function tips(data){
+        $('.tips').show();
+        $('.tips span').text(data);
+        setTimeout('$(".tips").hide()',3000);       
+    }
+    function again(){
+        var tx = $('.again').text();
+        // if(tx == '再抽一次'){
+        //     $(".cover,.bg").hide();
+        //     getPrize();
+        //     return false;             
+        // }
+        if(tx == '完善地址'){
+            referAdd();
+            // wx.error(function(res) {
+            //     alert(res);
+            // });            
+        }               
+    }
+    function referBtn(){
+        $('.warn').hide();
+        referAdd();
+    }
+    function showReferAdd(){
+        $('.warn').show(); 
+    }
+    function hideLog(){
+        $('.getLog').hide();
+    }
+    function showLog(){
+        $('.getLog').show();
+    }
+    function referAdd(){
+        wx.ready(function() {
+            wx.openAddress({
+                success: function(res) {
+                    $.ajax({
+                        url:'__CONTROLLER__/saveAddr',
+                        type:'post',
+                        data:res,
+                        success:function(data){
+                            tips(data.msg);
+                        }
+                    });
+                },
+                cancel: function(res) {
+                    showReferAdd();
+                }
+            });
+        });        
+    }
+    var click = false;
+    $(function() {
+        setInterval('AutoScroll("#record")', 6000);
+        AutoUp("#logListAuto table");      
+        lottery.init('lottery');
+        $("#lottery a").click(function() {
+            getPrize();
+        });       
+        $(".closeC").click(function(){
+            $(".cover,.bg").hide();
+        });
+        $(".ex_close img").click(function(){
+            $(".prizeExplain").hide();
+        });        
+        $(".expl").click(function(){
+            $(".prizeExplain").show();
+        });
+        $(".activity").click(function(){
+            $(".myprize span").removeClass("un").addClass('noun');            
+            $(".activity span").removeClass("noun").addClass('un');
+            $(".my_list").hide();
+            $(".active_ex").show();            
+        });
+        $(".myprize").click(function(){
+            $(".activity span").removeClass("un").addClass('noun');            
+            $(".myprize span").removeClass("non").addClass('un');
+            $(".active_ex").hide();
+            $(".my_list").show();
+        });        
+    })
+</script>

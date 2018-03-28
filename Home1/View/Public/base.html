@@ -1,0 +1,197 @@
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta  content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" >
+    <meta name="description" content="{:get_config('WEB_SITE_DESCRIPTION')}" />
+    <meta name="Keywords" content="{:get_config('WEB_SITE_KEYWORD')}" />
+    <meta name="baidu-site-verification" content="AJqIaqcvgG" />
+    <meta name="360-site-verification" content="8853f981b3aff2691733378b5407e9b9" />
+    <meta name="sogou_site_verification" content="RKqjpPmFLM"/>
+    <link rel="shortcut icon" href="__PUBLIC__/pc/images/logo.ioc" type="image/x-icon">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/reset.css" />
+    <script type="text/javascript" src="__PUBLIC__/pc/js/jquery-2.1.0.js"></script>
+    <!--  -->
+
+    <block name="style"></block>
+
+    <!--  -->
+</head>
+
+<body>
+<block name="head" >
+    <div class="head-block-fixed">
+    <div class="head-block">
+        <div class="head">
+            <div class="head-left">
+                <a href="{:U('Index/index')}" ><i class="logo"></i></a>
+                <img class="phoneNav" src="__PUBLIC__/pc/images/nav.png">
+                <ul class="nav">
+                    <li class="active"><a href="{:U('Index/index')}" >首页</a></li>
+                    <!-- <li><a href="{:('/Answer/index')}">问答</a></li> -->
+                    <li><a href="http://cf.chinanursecare.cn/">基金</a></li>
+                    <li><a href="http://shop.chinanursecare.cn/">商城</a></li>
+<!--                     <li><a href="index.html">工具</a></li>
+                    <li><a href="index.html">社区</a></li> -->
+                </ul>
+            </div>
+            <div>
+                <if condition="empty($userInfo['avatar'])">
+                    <div class="size-login">
+                    <a href="{:U('Public/login')}">登录</a>&nbsp;/
+                    <a href="{:U('Public/register')}">注册</a>
+                    </div>
+                    <else/>
+                    <div class="head-right">
+                    <a href="javascript:void(0);"><img class="portrait" src="{$userInfo.avatar}"></a>
+                    <!--<p class="head-new"><span class="news">10</span></p>-->
+                        <ul class="question">
+                            <a href="{:U('User/index')}"><li>个人中心</li></a>
+                            <a href="{:U('User/message')}"><li>我的信息</li></a>
+                            <a href="{:U('User/subscribe')}"><li>我的订阅</li></a>
+                            <!--<a href="{:U('User/answer')}"><li>我的回答</li></a>-->
+                            <a href="{:U('User/mycollect')}"><li>我的收藏</li></a>
+                            <a href="{:U('User/myhb')}"><li>我的H币</li></a>
+
+                            <a href="{:U('Article/myarticle')}"><li>我的发布</li></a>
+                            <a href="{:U('User/addr')}"><li>我的地址</li></a>
+                            <a href="{:U('User/manager')}"><li>账号管理</li></a>
+                            <a href="{:U('Public/logout')}"><li>退出登录</li></a>
+                        </ul>
+                    </div>
+                </if>
+            </div>
+        </div>
+    </div>
+    </div>
+</block>
+<block name="boby">
+    <div class="boby2">
+
+    </div>
+</block>
+    <div class="popup-login">
+    <div class="login">
+        <p class="open_close">&times;</p>
+        <div class="content">
+           <table border="0" cellpadding="0" cellspacing="0" width="100%">
+               <tr>
+                   <td class="cut_s">扫码登录<span class="active"></span></td>
+                   <td class="cut_u">账号登录<span></span></td>
+               </tr>
+           </table>        
+            <div class="login_u">
+               <div class="form">
+                   <form action="" method="post" accept-charset="utf-8">
+                       <p class="input_w">
+                            <span class="userImg"></span>
+                            <input type="text" name="username" placeholder="手机号">
+                        </p>
+                       <p class="input_w">
+                            <span class="pswImg"></span>
+                            <input type="password" name="password" placeholder="密码">
+                        </p>
+                       <p class="forget"><a href="{:U('Public/retrieve')}">忘记密码？</a></p>
+                       <p class="btn_ loginBtn"><input type="button" name="submit" value="登录" class="input_base"></p>
+                       <p class="btn_ registBtn"><a href="__MODULE__/Public/register"><input type="button" name="regist" value="注册" class="input_base"></a></p>
+                   </form>
+                   <p class="ta">第三方登录</p>
+                   <p class="wxBtn"><a href="javascript:;"></a></p>               
+               </div>                
+            </div>
+            <div class="login_s">
+                <p id="login_container" style="margin-top: -30px"></p>
+            </div>
+        </div>      
+    </div>
+    </div>
+
+<div class="give-reward">
+    <div class="give-reward-btn">
+        <p class="reward-title">打赏H币（从自己账户扣除）</p>
+        <input type="number" class="reward-number"  value="" placeholder="输入大于0的整数" >
+        <p class="affirm-reward">打赏给TA</p>
+        <p class="give-reward_close">&times;</p>
+    </div>
+</div>
+
+
+
+<div class="public-foot">
+    <div class="btn-foot">
+        <p class="logo-ft"></p>
+        <p class="purpose purpose-size">护士家园 — 以慈善助力为初心，诚挚服务为宗旨。</p>
+        <p class="purpose">是关爱：陪伴护士成长的温馨家园；是涵养：共创白衣精神的沃土良园；是分享：展示护士风采的交流平台。</p>
+    </div>
+    <div class="foot-nav">
+        <p class="foot-img">
+            <img src="__PUBLIC__/pc/images/wxcode.jpg" >
+            <script src="http://www.bcpcn.com/bcptags/05530840.js?v=1.0"></script>
+        </p>
+        <ul>
+            <li><a target="_blank" href="{:U('Public/about')}">关于我们</a></li>
+            <li><a href="http://cf.chinanursecare.cn/">慈善基金</a></li>
+            <li><a href="#">商务合作</a></li>
+            <li><a href="http://chinanursecare.com/index/job.html">人才招聘</a></li>
+        </ul>
+        <p class="foot-tel">
+            <span>四川护博医疗科技有限公司</span>
+            <span>电话：{:get_config('WEB_SITE_TEL')}</span>
+        </p>
+        <p class="foot-addr">
+            <span>地址：{:get_config('WEB_SITE_ADDR')}</span>
+            <span>邮箱：{:get_config('WEB_SITE_EMAILE')}</span>
+        </p>
+        <p class="foot-records">{:get_config('WEB_SITE_COPYRIGHT')}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{:get_config('WEB_SITE_ICP')}  </p>
+
+    </div>
+</div>
+
+
+<block name="script"></block>
+<script>
+
+    $(".give-reward_close").click(function () {
+        $(".give-reward").hide();
+    });
+    $(".affirm-reward").click(function () {
+        var number=$(".reward-number").val();
+        var artId = "{:I('get.id')}";
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            data:{'number':number,'artId':artId},
+            url: '__MODULE__/Detail/reward',
+            success: function (data) {
+                if(data==true){
+                    $(".give-reward").hide();
+                    tips("打赏成功",2);
+                }else{
+                    tips(data,2);
+                }
+            },
+        });
+    })
+
+//    下面代码只适用于平板点击出现下拉
+    $(".portrait").click(function () {
+       var isHover= $("ul").is('.isQuestion');
+        if(isHover){
+            $(".question").removeClass("isQuestion");
+        }else{
+            $(".question").addClass("isQuestion");
+        }
+    });
+
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?67bb322fb82c427b4efb2a21e9330ffc";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</body>
+
+</html>

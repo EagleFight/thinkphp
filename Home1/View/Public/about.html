@@ -1,0 +1,26 @@
+<extend name="Public:base" />
+<block name="style">
+    <title>关于我们</title>
+    <style>
+        .about{
+            width: 1200px;
+        margin: 20px auto 40px;
+            overflow: hidden;
+        }
+        .about img{
+            max-width: 100%;;
+        }
+        @media screen and (max-width: 1024px){
+            .about{
+                width: 98%;
+                
+            }
+        }
+    </style>
+</block>
+<block name="boby">
+    <div class="about">
+        {$list.content|htmlspecialchars_decode}
+    </div>
+
+</block>

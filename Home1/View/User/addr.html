@@ -1,0 +1,173 @@
+<extend name="User:public" />
+<block name="title">
+	<title>我的地址</title>
+</block>
+<block name="style">
+	<link rel="stylesheet" href="__PUBLIC__/pc/css/myaddr.css?v={:time()}" />
+</block>
+<block name="member">
+
+	    <div class="addr">
+			<div class="m_head">
+				我的地址
+			</div>
+			<div class="content">
+				<ul>
+					<volist name="list" id="vo">
+						<li>
+							<p>
+								<span class="name">{$vo.username}</span>
+								<span class="tag_base del" title="删除" aid="{$vo.addr_id}"></span>
+								<!-- <span class="tag_base edit" eid="{$vo.addr_id}"></span> -->
+							</p>
+							<p class="num">{$vo.telnumber}</p>
+							<p class="num">{$vo.postalcode}</p>
+							<p class="address">
+								<span class="addr_detail">{$vo.provincename} {$vo.cityname} {$vo.countryname} {$vo.detailinfo}</span>
+								<!-- <span class="moren">默认地址</span> -->
+							</p>
+						</li>
+					</volist>
+					<li>
+						<div class="add_new">
+							<p><img src="__PUBLIC__/pc/images/address_add.jpg" alt=""></p>
+							<p>添加新地址</p>
+						</div>
+					</li>
+				</ul>
+			</div>	    	
+	    </div>
+	    <div class="bg_1"></div>
+	    <div class="add_window">
+    		<p class="w_tit">添加新地址</p>
+    		<form action="" method="post" accept-charset="utf-8" id="myform">
+	    		<table border="0" cellpadding="0" cellspacing="0" width="100%">	
+	    			<tr>
+	    				<td>所在地区</td>
+	    				<td>
+						    <div class="form-inline">
+						      <div id="distpicker5">
+						        <div class="form-group">
+						          <select class="form-control" id="province" data-province="{$userJob.province}" name="provinceName"></select>
+						        </div>
+						        <div class="form-group">
+						          <select class="form-control" id="city" data-city="{$userJob.city}" name="cityName"></select>
+						        </div>
+						        <div class="form-group">
+						          <select class="form-control" id="district" data-district="{$userJob.district}" name="countryName"></select>
+						        </div>
+						      </div>
+						    </div>
+	    				</td>
+	    			</tr>	    			
+	    			<tr>
+	    				<td>详细地址</td>
+	    				<td><input type="text" name="detailInfo" class="detailInfo" placeholder="例如街道名称，门牌号码，楼层和房间号等信息"></td>
+	    			</tr>	    			
+	    			<tr>
+	    				<td>邮政编码</td>
+	    				<td><input type="text" name="postalCode" maxlength="6" onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="请输入邮政编码"></td>
+	    			</tr>	    			
+	    			<tr>
+	    				<td>收货人</td>
+	    				<td><input type="text" name="userName" placeholder="请输入收货人的名字"></td>
+	    			</tr>	    			
+	    			<tr>
+	    				<td>联系电话</td>
+	    				<td><input type="text" name="telNumber" maxlength="11" onkeyup="value=value.replace(/[^\d]/g,'')" placeholder="请输入您的电话"></td>
+	    			</tr>
+	    		</table>
+	    		<p class="btn_s"><button type="button" class="save">确定</button><button type="button" class="close">取消</button></p>
+    		</form>
+	    </div>
+	    <div class="bg_"></div><div class="tips"><span></span></div>
+
+</block>
+<block name="script">
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script src='__PUBLIC__/pc/js/distpicker.data.min.js' type='text/javascript'></script>
+<script src='__PUBLIC__/pc/js/distpicker.js' type='text/javascript'></script>
+<script type="text/javascript">
+	$(function(){
+		$('#distpicker5').distpicker({
+			autoSelect: false
+		});
+		$('.add_new').click(function(){
+			$('.bg_1,.add_window').fadeIn();
+		});
+		$('.close').click(function(){
+			$('.bg_1,.add_window').fadeOut();
+		});
+		$('.save').click(function(){
+            if(isNull($('#province').val())||isNull($('#city').val())||isNull($('#district').val())){
+                tips('请选择所在地区',2);
+                return false;
+            }
+            if(isNull($('input[name="detailInfo"]').val())){
+                tips('请输入详细地址',2);
+                return false;
+            }
+            if(isNull($('input[name="userName"]').val())){
+                tips('请输入收货人姓名',2);
+                return false;
+            }
+            if(isNull($('input[name="telNumber"]').val())){
+                tips('请输入联系电话',2);
+                return false;
+            }                        			
+			var params = $("#myform").serializeArray(); 
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data:{'params':params},
+                url: '__SELF__',
+                success: function (data) {
+                    if(data.status == 1){
+                    	tips(data.info);
+                        setTimeout('window.location.reload()',1500);
+                    }
+                }, 
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    tips('请勿重复提交！',2);
+                }
+            });  			
+		});
+		$('.del').click(function(){
+			var this_ = $(this);
+			var aid = this_.attr('aid');
+	        $.ajax({
+	            type: 'post',
+	            dataType: 'json',
+	            data:{'addr_id':aid},
+	            url: '__CONTROLLER__/delAddr',
+	            success: function (data) {
+	                if(data.status == 1){
+	                	this_.parent().parent().fadeOut();
+	                	setTimeout('window.location.reload()',500);
+	                }else{
+	                	tips(data.info,2);
+	                }
+	            }, 
+	            error: function(XMLHttpRequest, textStatus, errorThrown) {
+	                tips('删除失败',2);
+	            }
+	        });	
+		});	
+		$('.edit').click(function(){
+			var eid = $(this).attr('eid');
+			
+		});
+	});
+    function isNull(data){ 
+        return (data == "" || data == undefined || data == null || data == 0) ? true : false; 
+    }
+    function tips(data,sts){
+        $('.tips span').css('background-color','#11BFAF');
+        if(sts==2){
+            $('.tips span').css('background-color','red');
+        }
+        $('.tips span').text(data);
+        $('.tips,.bg_').fadeIn().delay(1000).fadeOut();
+    }	
+</script>
+</block>

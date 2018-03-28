@@ -1,0 +1,134 @@
+<extend name="Public:base" />
+<block name="style">
+    <title>{$info.title}</title>
+    <link rel="stylesheet" href="__PUBLIC__/pc/css/login.css?v={:time()}" />
+</block>
+<block name="boby">
+    <div class="login retrieve">
+        <div class="title">找回密码</div>
+        <div class="content">   
+            <div class="login_u">
+               <div class="form">
+                   <div>手机验证</div>
+                   <form action="" method="post" accept-charset="utf-8" id="form">
+                       <p class="input_w">
+                            <span class="userImg"></span>
+                            <input type="text" name="mobile" placeholder="手机号">
+                        </p>
+                        <p class="input_w verfiy">
+                            <span class="pswImg"></span>
+                            <input type="text" name="sms_code" class="verfiyInput" placeholder="请输入验证码">
+                        </p>
+                        <input type="button" name="verfiybtn" id="sendSmsBtn" class="verfiyCode" value="获取验证码">
+                       <p class="btn_ loginBtn"><input type="button" id="next" name="submit" value="下一步" class="input_base"></p>
+                   </form>            
+               </div>                
+            </div>
+        </div>
+        <div class="bg_"></div><div class="tips"><span></span></div>
+    </div>
+</block>
+<block name="script">
+    <script type="text/javascript">
+         $(function(){
+            wait_=60;
+            $('input[name=mobile]').focus(function(){
+                $(this).parent().css('border','1px solid #11BFAF');
+                $(this).prev().css('background-position','0px 0px');
+            });
+            $('input[name=mobile]').blur(function(){
+                $(this).parent().css('border','1px solid #E5E5E5');
+                $(this).prev().css('background-position','0px 24px');
+            });                                     
+            $('input[name=sms_code]').focus(function(){
+                $(this).parent().css('border','1px solid #11BFAF');
+                $(this).prev().css('background-position','-48px 0px');
+            });
+            $('input[name=sms_code]').blur(function(){
+                $(this).parent().css('border','1px solid #E5E5E5');
+                $(this).prev().css('background-position','-48px -24px');
+            });
+            $('input[name=submit]').on('click', function(){
+                nextSet();
+            });
+            $('input[name=sms_code],input[name=mobile]').on('input', function(){
+                if($('input[name=sms_code]').val().length == 6 && $('input[name=mobile]').val().length == 11){
+                    $('#next').css('background-color','#11BFAF');
+                    $('#next').attr('disabled', false);
+                }else{
+                    $('#next').css('background-color','#C3E4EB');
+                    $('#next').attr('disabled', true);
+                }
+            });
+            $('#sendSmsBtn').on('click', function(){
+                var moble_ = $('input[name=mobile]').val();
+                if(isNull(moble_) || moble_.length != 11){
+                    tips('请输入正确的手机号',2);
+                    return false;
+                }            
+                $.get('{:U("Api/Sms/reg")}', {'mobile':moble_}, function(result){
+                    if(!result.status){
+                        tips(result.info,2);
+                    }
+                    time();
+                });
+            });                   
+        });   
+        function nextSet(){
+            var mobile = $('input[name=mobile]').val();
+            var sms_code = $('input[name=sms_code]').val();
+            if(isNull(mobile)||mobile.length != 11){
+                tips('请输入正确手机号码',2);
+                return false;
+            }                
+            if(isNull(sms_code)){
+                tips('请输入验证码',2);
+                return false;
+            }
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                data:{'mobile':mobile,'sms_code':sms_code},
+                url: '__SELF__',
+                success: function (data) {                    
+                    if(data.status == 1){
+                      window.location.href='__CONTROLLER__/setpsw'
+                    }else{
+                      tips(data.info,2);  
+                    }
+                }, 
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    tips('请勿重复提交！',2);
+                }
+            });              
+        }
+
+        function isNull(data){ 
+            return (data == "" || data == undefined || data == null || data == 0) ? true : false; 
+        }
+        function tips(data,sts){
+            $('.tips span').css('background-color','#11BFAF');
+            if(sts==2){
+                $('.tips span').css('background-color','red');
+            }
+            $('.tips span').text(data);
+            $('.tips,.bg_').fadeIn().delay(1000).fadeOut();
+        }
+        function time() {
+            var obj = document.getElementById("sendSmsBtn");  
+            if (wait_ == 0) {  
+                obj.removeAttribute("disabled");            
+                obj.value="获取验证码";  
+                wait_ = 60; 
+            } else {
+                obj.setAttribute("disabled", true);  
+                obj.value="重新发送(" + wait_ + ")";  
+                wait_--;  
+                setTimeout(function() {  
+                    time()  
+                },  
+                1000)  
+            }  
+        }                
+    </script>
+</block>

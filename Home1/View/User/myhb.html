@@ -1,0 +1,71 @@
+<extend name="User:public" />
+<block name="title">
+	<title>我的H币</title>
+</block>
+<block name="style">
+	<link rel="stylesheet" href="__PUBLIC__/pc/css/mystyle.css?v={:time()}" />
+</block>
+<block name="member">
+
+		<div class="myhb">
+			<div class="m_head">
+				我的H币
+			</div>
+			<div class="m_content radius">
+				<div class="total">
+					<p><img src="__PUBLIC__/pc/images/gold.png" alt=""></p>
+					<p class="total_detail">我的H币：<span>{$hbtotal|default=0}</span></p>
+					<div class="hb_explain"><img src="__PUBLIC__/pc/images/question.png" alt="">H币说明</div>
+				</div>
+				<div class="hb_detail">
+					<div class="font16">
+						H币明细
+					</div>
+					<div>
+						<table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<th>说明</th>
+								<th>数量</th>
+								<th>时间</th>
+							</tr>
+							<volist name="hbLog" id="vo" empty="$empty">
+								<tr>
+									<td>{$vo.remark}</td>
+									<td>{$vo.money}</td>
+									<td>{$vo['time']|time_tran=###,"Y-m-d"}</td>
+								</tr>								
+							</volist>								
+						</table>
+					</div>
+					<ul class="page">
+					{$page}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="bg_"></div>
+		<div class="open_fo">
+			<p class="open_close">&times;</p>
+			<div class="open_title">
+				H币说明
+			</div>
+			<div class="open_con">
+				{$hbexp.content|htmlspecialchars_decode}
+			</div>
+
+	</div>
+</block>
+
+<block name="script">
+<script type="text/javascript" src="//cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$('.hb_explain').click(function(){
+			$('.bg_,.open_fo').fadeIn();
+		});
+		$('.open_close').click(function(){
+			$('.bg_,.open_fo').hide();
+		});
+	});
+</script>	
+</block>

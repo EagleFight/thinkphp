@@ -1,0 +1,92 @@
+<extend name="Public:base_densin" />
+
+<block name="docMeta">
+</block>
+
+<block name="docFile">
+<load href="__PUBLIC__/pc/answer/stylesheets/answer.css" />
+<js href='__PUBLIC__/home/scripts/functions.js' />
+<script type="text/javascript">
+window.onload=goTopPos;
+window.onresize=goTopPos;
+window.onscroll=goTopVisible;
+comments_load_p=1;
+function goTopVisible(){
+	if(getScrollTop()>100){
+		if(document.querySelector('.btn_gototop_visible'))return;
+		addClass(document.querySelector('.btn_gototop'),'btn_gototop_visible');
+	}else{
+		if(!document.querySelector('.btn_gototop_visible'))return;
+		removeClass(document.querySelector('.btn_gototop_visible'),'btn_gototop_visible');
+	}
+}
+function goTopPos(){
+	top_obj=document.querySelector('main');
+	btn=document.querySelector('.btn_gototop');
+	right=top_obj.offsetLeft<btn.clientWidth+20?20:top_obj.offsetLeft-btn.clientWidth-20;
+	btn.style.right=right+'px';
+	btn.onclick=scrollTo;
+}
+function commentsLoadMore(){
+	load_obj=document.querySelector('.comments_loadmore');
+	ajax('{:U("getReplyCommentList",false,false)}/id/{$data.id}/from/1/p/'+comments_load_p,function(data){
+		reply_comments_tpl='<li>'+
+			'<a href="{:U("Other/answer",false,false)}/uid/$user_id$" class="avatar"><img src="$avatar$"></a>'+
+			'<div class="comments_content">'+
+				'<time>$create_time$</time>'+
+				'<a href="{:U("Other/answer",false,false)}/uid/$user_id$">$nickname$</a>'+
+				'<p>$content$</p>'+
+			'</div>'+
+		'</li>';
+		if(data.end){
+			load_obj.innerHTML='没有更多了';
+			load_obj.onclick=false;
+			load_obj.style.color='#CCC';
+		}else{
+			comments_load_p++;
+		}
+		data=data.data;
+		html='';
+		for(i=0;i<data.length;i++){
+			data[i].create_time=data[i].create_time.substr(0,10);
+			html+=reply_comments_tpl.tpl(data[i]);
+		}
+		if(html==''&&comments_load_p==1){
+			html='暂无回复<br><br>';
+			load_obj.style.display='none';
+		}
+		load_obj.parentNode.querySelector('ul').innerHTML+=html;
+	});
+}
+</script>
+</block>
+
+<block name="docBody">
+<div class="box_shadow btn_gototop"></div>
+<main>
+	<section class="dtl">
+		<a class="btn quickans" href="{:U('dtl?id='.$data[answer_id])}" style="margin:20px 20px 0 0">&lt;返回问题</a>
+		<ul class="box_shadow replies_list">
+			<li>
+				<a href="{:U('myAnswer')}" class="avatar"><img src="{$data.avatar}"></a>
+				<div class="reply_content">
+					<div class="reply_info">
+						<a href="{:U('myAnswer')}">{$data.nickname}</a>
+						<time>{$data.create_time|strtotime|date='Y-m-d',###}</time>
+						<p class="text">{$data.content}</p>
+						<p class="thumb"><volist name="data.media" id="vo"><img src="{$vo}"></volist></p>
+						<span class="comment_count">{$data.comment_count}</span>
+					</div>
+					<div class="reply_comments">
+						<ul>
+						</ul>
+						<a href="javascript:;" class="comments_loadmore" onclick="commentsLoadMore();">查看更多</a>
+					</div>
+				</div>
+			</li>
+		</ul>
+		<script type="text/javascript">commentsLoadMore();</script>
+	</section>
+	<include file="right" />
+</main>
+</block>
